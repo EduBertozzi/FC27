@@ -74,6 +74,10 @@ export function MatchForm({ career, today, prefill, startWithVoice, onSaved }: M
     () => [...new Set(career.matches.map((m) => m.opponent))].sort(),
     [career.matches],
   );
+  const voiceOpponents = useMemo(
+    () => [...new Set([...knownOpponents, ...career.fixtures.map((f) => f.opponent)])],
+    [knownOpponents, career.fixtures],
+  );
   const result = resultOf(values);
 
   const set = <K extends keyof MatchFormValues>(key: K, value: MatchFormValues[K]) => {
@@ -413,6 +417,9 @@ export function MatchForm({ career, today, prefill, startWithVoice, onSaved }: M
         open={voiceOpen}
         onOpenChange={setVoiceOpen}
         knownCompetitions={knownCompetitions}
+        knownOpponents={voiceOpponents}
+        ownClub={career.currentClub}
+        league={career.league}
         today={today}
         onConfirm={(fields) => {
           setValues((v) => applyExtraction(v, fields));

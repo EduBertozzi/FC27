@@ -87,6 +87,8 @@ export function applyExtraction(v: MatchFormValues, fields: Partial<MatchInput>)
   }
   if (fields.yellowCards !== undefined) next.yellowCards = fields.yellowCards;
   if (fields.redCard !== undefined) next.redCard = fields.redCard;
+  if (fields.substitutionMinute !== undefined)
+    next.substitutionMinute = String(fields.substitutionMinute);
   return next;
 }
 

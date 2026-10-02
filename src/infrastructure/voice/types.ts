@@ -21,6 +21,12 @@ export type ExtractableField = keyof MatchInput;
 export interface ExtractionContext {
   /** Competições já usadas na carreira — ajudam a reconhecer nomes curtos. */
   knownCompetitions: readonly string[];
+  /** Adversários já enfrentados ou agendados — grafia preferida para nomes de clubes. */
+  knownOpponents?: readonly string[];
+  /** Clube atual do jogador: nunca é o adversário e define o lado do placar. */
+  ownClub?: string;
+  /** Liga do clube atual: usada quando o jogador diz só "pela liga" ou "pelo campeonato". */
+  league?: string;
   today: string;
 }
 

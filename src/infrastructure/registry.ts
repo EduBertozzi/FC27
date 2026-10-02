@@ -1,5 +1,6 @@
 import { MockCareerAssistant } from "./ai/mock-assistant";
 import { type CareerAssistant } from "./ai/types";
+import { footballRelevance } from "./voice/football-lexicon";
 import { MockTranscriptionProvider } from "./voice/mock-transcription";
 import { RuleBasedMatchExtractor } from "./voice/rule-based-extractor";
 import {
@@ -27,7 +28,7 @@ export function getServices(): Services {
   services ??= {
     assistant: new MockCareerAssistant(),
     transcription: new MockTranscriptionProvider(),
-    liveTranscriber: new WebSpeechTranscriber(),
+    liveTranscriber: new WebSpeechTranscriber({ rankAlternative: footballRelevance }),
     matchExtractor: new RuleBasedMatchExtractor(),
   };
   return services;

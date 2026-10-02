@@ -23,6 +23,9 @@ interface VoiceCaptureProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   knownCompetitions: string[];
+  knownOpponents: string[];
+  ownClub: string;
+  league: string;
   today: string;
   onConfirm: (fields: Partial<MatchInput>) => void;
 }
@@ -34,6 +37,7 @@ const PREVIEW_ORDER: (keyof MatchInput)[] = [
   "goalsFor",
   "role",
   "minutes",
+  "substitutionMinute",
   "goals",
   "assists",
   "rating",
@@ -63,10 +67,6 @@ function describe(field: keyof MatchInput, fields: Partial<MatchInput>): string 
   }
 }
 
-/**
- * Fluxo de voz (Fase 1 simulada): gravar → transcrever → interpretar → prévia → confirmar.
- * Nenhum áudio é captado nem armazenado neste protótipo; a transcrição vem do provedor mock.
- */
 const VOICE_ERROR_MESSAGE: Record<LiveTranscriptionError, string> = {
   "not-supported": "Este navegador não reconhece fala. Digite o relato abaixo.",
   "permission-denied":
@@ -78,10 +78,17 @@ const VOICE_ERROR_MESSAGE: Record<LiveTranscriptionError, string> = {
   unknown: "O reconhecimento de fala falhou. Tente de novo ou digite o relato.",
 };
 
+/**
+ * Fluxo de voz: ouvir (reconhecimento do navegador) → interpretar → prévia → confirmar.
+ * O app não grava nem guarda áudio; só o texto transcrito é interpretado.
+ */
 export function VoiceCapture({
   open,
   onOpenChange,
   knownCompetitions,
+  knownOpponents,
+  ownClub,
+  league,
   today,
   onConfirm,
 }: VoiceCaptureProps) {
@@ -128,6 +135,9 @@ export function VoiceCapture({
     try {
       const extraction = await getServices().matchExtractor.extract(transcript, {
         knownCompetitions,
+        knownOpponents,
+        ownClub,
+        league,
         today,
       });
       setText(extraction.transcript);
@@ -226,8 +236,11 @@ export function VoiceCapture({
               <span className="sr-only">Começar a gravar</span>
             </button>
             <p className="max-w-sm text-sm text-fg-2">
-              Ex.: &ldquo;Joguei contra o Arsenal, ganhamos de três a um, fiz dois gols e dei uma
-              assistência. Tirei nota nove.&rdquo;
+              Fale do seu jeito: &ldquo;Ganhamos de 3x1 do Porto em casa pela liga, fiz um gol e dei
+              duas assistências, nota 8,7, joguei os 90.&rdquo;
+            </p>
+            <p className="max-w-sm text-xs text-fg-3">
+              Pode fazer pausas: só paro de ouvir quando você tocar em parar.
             </p>
             <Button variant="ghost" size="sm" onClick={() => setStep("typing")}>
               <Keyboard className="size-4" aria-hidden="true" />
