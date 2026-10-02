@@ -162,4 +162,44 @@ describe("extractMatchFromText", () => {
       expect(r.fields.redCard).toBeUndefined();
     });
   });
+
+  describe("futebol holandês", () => {
+    const nl = {
+      knownCompetitions: ["Eredivisie"],
+      ownClub: "Ajax",
+      league: "Eredivisie",
+      today: "2027-01-14",
+    };
+
+    it("entende clubes e a liga holandesa como o microfone transcreve", () => {
+      const r = extractMatchFromText(
+        "ganhamos do feienord de 2 a 1 fora de casa pela eredivise fiz 1 gol",
+        nl,
+      );
+      expect(r.fields).toMatchObject({
+        opponent: "Feyenoord",
+        competition: "Eredivisie",
+        goalsFor: 2,
+        goalsAgainst: 1,
+        venue: "away",
+        goals: 1,
+      });
+    });
+
+    it("reconhece a copa e apelidos de clubes menores", () => {
+      expect(
+        extractMatchFromText("jogo contra o heerenven pela copa da holanda", nl).fields,
+      ).toMatchObject({ opponent: "Heerenveen", competition: "KNVB Beker" });
+      expect(extractMatchFromText("pegamos o pe esse ve em casa", nl).fields.opponent).toBe("PSV");
+      expect(extractMatchFromText("contra o az pela liga", nl).fields).toMatchObject({
+        opponent: "AZ Alkmaar",
+        competition: "Eredivisie",
+      });
+    });
+
+    it("nunca toma o próprio clube holandês como adversário", () => {
+      const r = extractMatchFromText("ajax 3 a 0 twente", nl);
+      expect(r.fields).toMatchObject({ opponent: "FC Twente", goalsFor: 3, goalsAgainst: 0 });
+    });
+  });
 });
