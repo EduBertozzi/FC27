@@ -1,38 +1,55 @@
-# Design System — Floodlit
+# Design System — Glass
 
-Catálogo vivo em **`/design-system`**. Tokens em `src/app/globals.css`; componentes em `src/components/ui`, `football` e `charts`.
+Catálogo vivo em **`/design-system`**. Tokens em `src/app/globals.css`; componentes em `src/components/ui`, `football`, `charts` e `motion`.
+
+> Substitui a primeira versão ("Floodlit", Barlow + dourado), reprovada na avaliação do protótipo. A direção escolhida foi a **C · Vidro** do canvas de protótipos.
 
 ## Direção
 
-Noite de jogo sob refletores. A carreira é o centro: um único acento dourado marca o que é **conquista e ação** (OVR, botão principal, gols, títulos). O resto é silencioso para que números e nomes falem.
-
-Processo de definição: consultas à skill **UI/UX Pro Max** (par tipográfico Sports/Fitness — Barlow Condensed + Barlow; estilo data-dense para painéis), revisão contra os "defaults genéricos" da skill **frontend-design** (evitamos fundo quase-preto com verde-ácido, kit SaaS de cards idênticos, rótulos em caixa-alta), regras da **Bencium UX** (hierarquia por superfície e tipografia, não por sombra) e validação de cores de gráfico com a skill **dataviz**.
+Vidro fosco sobre luzes de estádio, com a linguagem visual da Apple: tipografia de sistema, cantos generosos, branco como ação principal e cor apenas onde carrega significado. A luz ambiente é tingida pela **cor do clube da carreira ativa**, então cada carreira tem a sua atmosfera.
 
 ## Cor
 
-| Token                   | Valor                             | Uso                                                                     |
-| ----------------------- | --------------------------------- | ----------------------------------------------------------------------- |
-| `bg`                    | `#0e1930`                         | Fundo                                                                   |
-| `surface-1/2/3`         | `#14223d` / `#1a2c4d` / `#22385f` | Card / controle / hover-selecionado                                     |
-| `line`, `line-strong`   | `#2a4069`, `#3b5687`              | Bordas                                                                  |
-| `fg`, `fg-2`, `fg-3`    | `#f1f4fa`, `#b4c0d6`, `#8e9fbf`   | Texto (14,4 / 8,6 / 5,9 : 1 sobre surface-1)                            |
-| `accent`                | `#f6b940`                         | Ação principal, OVR, conquista (texto escuro sobre ele: 10,5:1)         |
-| `win` / `draw` / `loss` | `#34c27f` / `#9aa8c2` / `#f4737c` | Resultado — sempre com letra V/E/D                                      |
-| `ai`                    | `#8fa2ff`                         | Companion de IA e voz                                                   |
-| `chart-1` / `chart-2`   | `#c07c0c` / `#6577e6`             | Séries de gols / assistências (validadas: CVD ΔE ≥ 27, contraste ≥ 3:1) |
+| Token                   | Valor                             | Uso                                                                             |
+| ----------------------- | --------------------------------- | ------------------------------------------------------------------------------- |
+| `bg`                    | `#050b18`                         | Fundo sólido atrás da luz ambiente                                              |
+| luz ambiente            | cor do clube + luz quente + azul  | `Backdrop` fixo; foto opcional por baixo (`src/lib/media.ts`)                   |
+| `surface-1/2/3`         | branco 7% / 10% / 16%             | Vidro: cards / controles / hover-selecionado (`.glass` aplica desfoque e borda) |
+| `sheet`                 | `#101626` a 88%                   | Modais, menus, toasts, barra de abas                                            |
+| `fg`, `fg-2`, `fg-3`    | branco 100% / 80% / 70%           | Texto                                                                           |
+| `accent`                | `#ffffff`                         | Ação principal, com texto `on-accent` (`#050b18`)                               |
+| `gold`                  | `#ffd27a`                         | Conquistas e notas de destaque                                                  |
+| `win` / `draw` / `loss` | `#4ade80` / `#c4c9d4` / `#ff7a7a` | Resultado, sempre com rótulo V/E/D                                              |
+| `ai`                    | `#aab8ff`                         | Companion de IA e voz                                                           |
+| `chart-1` / `chart-2`   | `#ffc24d` / `#8ea6ff`             | Gols / assistências                                                             |
 
-Regras: `fg-3` não é usado sobre `surface-3`; cor nunca é o único portador de significado.
+Escudos: monograma circular nas cores tradicionais do clube (só cores, nenhum escudo oficial); a cor do texto é escolhida automaticamente pela luminância para manter contraste AA.
 
 ## Tipografia
 
-Barlow Condensed (500–700) para display, placares e manchetes; Barlow (400–700) para texto. Escala 1,25 a partir de 16px: `xs 13 · sm 14 · base 16 · lg 20 · xl 25 · 2xl 31 · 3xl 39 · 4xl 49 · 5xl 61 · 6xl 95`. Números com `tabular-nums`. Rótulos em caixa normal.
+Fonte de sistema da Apple (`-apple-system`, SF Pro) com **Inter** (SIL OFL) como reserva fora do ecossistema Apple. Escala baseada nos estilos dinâmicos do iOS: `xs 13 · sm 15 · base 17 · lg 20 · xl 22 · 2xl 28 · 3xl 34 · 4xl 44 · 5xl 56 · 6xl 80`. Títulos com tracking negativo; números com `tabular-nums`.
 
-## Espaço, raio, elevação, movimento
+## Forma e profundidade
 
-- Espaço: base 4px (4/8/12/16/24/32/48).
-- Raio com hierarquia: `xs 4` badges · `sm 8` controles · `md 12` cards · `lg 20` herói/modais.
-- Elevação: cards usam borda + mudança de superfície; sombra só em camadas flutuantes (`shadow-pop`, `shadow-overlay`).
-- Movimento: 150–320ms, `ease-out-quint`. Um único momento coreografado (revelação do Surpreenda-me). `prefers-reduced-motion` zera animações.
+- Raio: `xs 8` · `sm 14` controles · `md 24` cards · `lg 32` herói/sheets; botões, chips e abas em pílula.
+- Profundidade por vidro (translucidez + desfoque + borda de 1px com reflexo no topo); sombras só em camadas flutuantes.
+
+## Movimento (`motion`)
+
+| Padrão                            | Onde                                             |
+| --------------------------------- | ------------------------------------------------ |
+| Transição de tela (fade + subida) | `app/template.tsx`                               |
+| Entrada em cascata                | `Reveal` / `RevealItem` (Início)                 |
+| Números contando                  | `AnimatedNumber` (OVR, gols, assistências, nota) |
+| Barras e linhas que se desenham   | `ProgressBar`, `Sparkline`                       |
+| Indicador de aba deslizante       | barra de abas mobile e sidebar (`layoutId`)      |
+| Orbe de voz pulsando              | registro de partida                              |
+
+Com "reduzir movimento" ativo, as entradas aparecem prontas, sem animação (`MotionConfig reducedMotion="user"` + `useReducedMotion`).
+
+## Fotos
+
+O ambiente de desenvolvimento atual não tem acesso a bancos de imagem. Os pontos de foto já existem (`MEDIA.backdrop`, `MEDIA.heroPlayer` em `src/lib/media.ts`); basta colocar arquivos licenciados em `public/media/` e registrar em `public/media/CREDITS.md`.
 
 ## Componentes
 
@@ -48,8 +65,8 @@ Barlow Condensed (500–700) para display, placares e manchetes; Barlow (400–7
 
 ## Mobile
 
-Não é o desktop encolhido: barra inferior com 4 destinos + ação central "Registrar partida", menu **Mais** em bottom sheet, barra de salvar fixa no formulário, modais viram sheets, áreas de toque ≥ 44px, `safe-area-inset` respeitado.
+Não é o desktop encolhido: barra de abas flutuante em vidro (Início, Carreira, ação central "Registrar", Timeline, Mais) com indicador deslizante, menu **Mais** em sheet, botão de salvar fixo acima da barra, modais viram sheets, áreas de toque ≥ 44px, `safe-area-inset` respeitado.
 
 ## Acessibilidade
 
-WCAG 2.2 AA verificado com axe-core em todas as telas (E2E). Link "Pular para o conteúdo", foco visível dourado, `aria-current` na navegação, resultados e forma com texto alternativo, gráficos com tabela de dados.
+WCAG 2.2 AA verificado com axe-core em todas as telas (E2E). Link "Pular para o conteúdo", foco visível branco, `aria-current` na navegação, resultados e forma com texto alternativo, gráficos com tabela de dados.

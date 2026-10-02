@@ -64,18 +64,19 @@ Outras características: múltiplas carreiras com troca rápida, restauração d
 
 ## Stack
 
-| Camada                       | Escolha                                                    | Por quê                                                                                                                    |
-| ---------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Framework                    | **Next.js 16** (App Router, Turbopack) + **React 19**      | Rotas por arquivo, server components para o shell, API routes/server actions prontas para a Fase 2 sem trocar de framework |
-| Linguagem                    | **TypeScript** `strict` + `noUncheckedIndexedAccess`       | Domínio rico (estatísticas, regras); erros pegos em compilação                                                             |
-| Estilo                       | **Tailwind CSS v4** com tokens em CSS (`@theme`)           | Tokens do Design System viram utilitários; tema trocável por variáveis CSS                                                 |
-| Acessibilidade de primitivas | **Radix UI** (Dialog, Tabs, Dropdown, Tooltip, RadioGroup) | Foco, teclado e ARIA corretos sem reinventar                                                                               |
-| Ícones                       | **Lucide** (ISC)                                           | Um único estilo de traço em todo o app                                                                                     |
-| Fontes                       | **Barlow / Barlow Condensed** via `@fontsource` (SIL OFL)  | Auto-hospedadas, sem dependência de rede no build                                                                          |
-| Validação                    | **Zod**                                                    | Mesmo schema valida UI, casos de uso e (futuramente) API                                                                   |
-| Estado (Fase 1)              | **Zustand** + `persist` (localStorage)                     | Simples, fora do React para os casos de uso; substituível pela API na Fase 2                                               |
-| Testes                       | **Vitest** + Testing Library, **Playwright**, **axe-core** | Unidade/integração rápidos; E2E desktop e mobile; auditoria WCAG automatizada                                              |
-| Qualidade                    | ESLint (flat config, limites de camada), Prettier          | Mesmas regras local e CI                                                                                                   |
+| Camada                       | Escolha                                                           | Por quê                                                                                                                    |
+| ---------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Framework                    | **Next.js 16** (App Router, Turbopack) + **React 19**             | Rotas por arquivo, server components para o shell, API routes/server actions prontas para a Fase 2 sem trocar de framework |
+| Linguagem                    | **TypeScript** `strict` + `noUncheckedIndexedAccess`              | Domínio rico (estatísticas, regras); erros pegos em compilação                                                             |
+| Estilo                       | **Tailwind CSS v4** com tokens em CSS (`@theme`)                  | Tokens do Design System viram utilitários; tema trocável por variáveis CSS                                                 |
+| Acessibilidade de primitivas | **Radix UI** (Dialog, Tabs, Dropdown, Tooltip, RadioGroup)        | Foco, teclado e ARIA corretos sem reinventar                                                                               |
+| Ícones                       | **Lucide** (ISC)                                                  | Um único estilo de traço em todo o app                                                                                     |
+| Fontes                       | Fonte de sistema da Apple + **Inter** via `@fontsource` (SIL OFL) | Visual nativo em iPhone/Mac; reserva auto-hospedada no resto                                                               |
+| Animação                     | **Motion** (`motion/react`)                                       | Transições, springs e animações de layout declarativas em React                                                            |
+| Validação                    | **Zod**                                                           | Mesmo schema valida UI, casos de uso e (futuramente) API                                                                   |
+| Estado (Fase 1)              | **Zustand** + `persist` (localStorage)                            | Simples, fora do React para os casos de uso; substituível pela API na Fase 2                                               |
+| Testes                       | **Vitest** + Testing Library, **Playwright**, **axe-core**        | Unidade/integração rápidos; E2E desktop e mobile; auditoria WCAG automatizada                                              |
+| Qualidade                    | ESLint (flat config, limites de camada), Prettier                 | Mesmas regras local e CI                                                                                                   |
 
 Decisões detalhadas em [`docs/adr`](docs/adr).
 
@@ -217,7 +218,7 @@ docs/                    # arquitetura, design system, ADRs, screenshots
 
 ## Design System
 
-Identidade **Floodlit** — noite de jogo sob refletores: azul-estádio profundo, dourado de refletor como acento único (ação, overall, conquista), verde/cinza/coral só para resultados e um azul-lavanda reservado ao companion de IA. Tipografia Barlow Condensed (placar, manchetes) + Barlow (texto). Documentação em [`docs/design-system.md`](docs/design-system.md) e ao vivo em `/design-system`.
+Identidade **Glass** — vidro fosco sobre luzes de estádio, na linguagem visual da Apple: fonte de sistema (SF Pro, com Inter de reserva), cantos generosos, branco como ação principal e a luz ambiente tingida pela cor do clube da carreira. Animações com [Motion](https://motion.dev) (transições de tela, entrada em cascata, números contando, indicador de aba deslizante), sempre respeitando "reduzir movimento". Documentação em [`docs/design-system.md`](docs/design-system.md) e ao vivo em `/design-system`.
 
 ## Fluxo de trabalho Git
 
