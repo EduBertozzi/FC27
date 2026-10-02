@@ -1,6 +1,7 @@
 import { findArchetype } from "@/domain/player/archetypes";
 import { FOOT_LABEL } from "@/domain/player/player";
 import { POSITIONS } from "@/domain/player/positions";
+import { splitObjectives } from "@/domain/player/schema";
 import { formatHeight } from "@/lib/format";
 
 import { ClubCrest } from "../football/club-crest";
@@ -55,10 +56,17 @@ export function CreatorPreview({ values, age }: { values: CreatorValues; age: nu
           <ClubCrest name={values.club || "?"} />
           <div className="min-w-0">
             <p className="truncate font-semibold">{values.club || "Clube inicial"}</p>
-            <p className="truncate text-sm text-fg-3">{values.objective || "Objetivo a definir"}</p>
+            <p className="truncate text-sm text-fg-3">{objectiveSummary(values.objective)}</p>
           </div>
         </div>
       </div>
     </div>
   );
+}
+
+function objectiveSummary(text: string): string {
+  const items = splitObjectives(text);
+  if (items.length === 0) return "Objetivos a definir";
+  if (items.length === 1) return items[0] ?? "";
+  return `${items[0]} e mais ${items.length - 1}`;
 }

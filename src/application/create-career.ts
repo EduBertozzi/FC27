@@ -1,5 +1,5 @@
 import { type Career } from "@/domain/career/career";
-import { type NewCareerInput, newCareerSchema } from "@/domain/player/schema";
+import { type NewCareerInput, newCareerSchema, splitObjectives } from "@/domain/player/schema";
 import { type Result, AppError, err, ok } from "@/lib/result";
 
 /** Valor de mercado inicial estimado só a partir do overall (heurística de protótipo). */
@@ -62,7 +62,12 @@ export function createCareer(
     pastSeasons: [],
     overallHistory: [{ date: options.today, overall: input.overall }],
     objectives: [
-      { id: options.createId("obj"), title: input.objective, status: "active", source: "player" },
+      ...splitObjectives(input.objective).map((title) => ({
+        id: options.createId("obj"),
+        title,
+        status: "active" as const,
+        source: "player" as const,
+      })),
       ...(input.challenge
         ? [
             {
@@ -83,7 +88,7 @@ export function createCareer(
         date: options.today,
         season,
         title: `Começa a carreira no ${input.club}`,
-        description: input.objective,
+        description: `Objetivos: ${splitObjectives(input.objective).join(", ")}.`,
         highlight: true,
       },
     ],

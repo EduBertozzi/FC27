@@ -61,4 +61,21 @@ describe("matchInputSchema", () => {
     const r = matchInputSchema.safeParse({ ...valid, competition: " ", opponent: "" });
     expect(r.error?.issues.map((i) => i.path[0]).sort()).toEqual(["competition", "opponent"]);
   });
+
+  it("mensagens de campos ausentes saem em português", () => {
+    const r = matchInputSchema.safeParse({
+      ...valid,
+      venue: undefined,
+      role: undefined,
+      goals: 99,
+    });
+    const messages = r.error?.issues.map((i) => i.message) ?? [];
+    expect(messages).toEqual(
+      expect.arrayContaining([
+        "Escolha casa, fora ou neutro",
+        "Informe se foi titular ou reserva",
+        "Máximo de 15 gols",
+      ]),
+    );
+  });
 });

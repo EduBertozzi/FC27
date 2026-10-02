@@ -6,11 +6,12 @@ import { ARCHETYPES } from "@/domain/player/archetypes";
 import { CHALLENGES, CLUBS } from "@/domain/ideas/catalog";
 import { NATIONALITIES } from "@/domain/player/nationalities";
 import { POSITIONS } from "@/domain/player/positions";
+import { MAX_OBJECTIVE_LENGTH, MAX_OBJECTIVES, splitObjectives } from "@/domain/player/schema";
 import { cn } from "@/lib/cn";
 import { formatHeight } from "@/lib/format";
 
 import { PitchPositionPicker } from "../football/pitch-position-picker";
-import { Field, Input, Select } from "../ui/field";
+import { Field, Input, Select, Textarea } from "../ui/field";
 import { NumberStepper } from "../ui/number-stepper";
 import { SegmentedControl } from "../ui/segmented-control";
 import { type CreatorValues, type StepErrors } from "./creator-state";
@@ -240,22 +241,37 @@ const OBJECTIVE_PRESETS = [
   "Virar ídolo do clube",
   "Conquistar a Champions League",
   "Ser artilheiro da liga",
+  "Bater o recorde de assistências",
+  "Ganhar uma Copa do Mundo",
 ];
 
 export function GoalStep({ values, errors, set }: StepProps) {
+  const objectives = splitObjectives(values.objective);
+  const has = (o: string) => objectives.some((item) => item.toLowerCase() === o.toLowerCase());
+  const toggle = (o: string) => {
+    const next = has(o)
+      ? objectives.filter((item) => item.toLowerCase() !== o.toLowerCase())
+      : [...objectives, o];
+    set("objective", next.join(", "));
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap gap-2" aria-label="Sugestões de objetivo">
+        <div
+          className="flex flex-wrap gap-2"
+          role="group"
+          aria-label="Sugestões de objetivo (pode escolher várias)"
+        >
           {OBJECTIVE_PRESETS.map((o) => (
             <button
               key={o}
               type="button"
-              aria-pressed={values.objective === o}
-              onClick={() => set("objective", o)}
+              aria-pressed={has(o)}
+              onClick={() => toggle(o)}
               className={cn(
                 "min-h-9 rounded-full border px-3.5 text-sm transition-colors",
-                values.objective === o
+                has(o)
                   ? "border-accent bg-accent-soft text-accent"
                   : "border-line text-fg-2 hover:border-line-strong hover:text-fg",
               )}
@@ -265,12 +281,41 @@ export function GoalStep({ values, errors, set }: StepProps) {
           ))}
         </div>
         <Field
-          label="Objetivo principal"
-          hint="Escolha uma sugestão ou escreva o seu."
+          label="Objetivos"
+          hint={`Um ou vários, até ${MAX_OBJECTIVES}. Separe por vírgula ou em linhas diferentes.`}
           error={errors.objective}
         >
-          <Input value={values.objective} onChange={(e) => set("objective", e.target.value)} />
+          <Textarea
+            value={values.objective}
+            onChange={(e) => set("objective", e.target.value)}
+            placeholder="Conquistar a Champions League, chegar à seleção principal, ganhar uma Copa do Mundo"
+          />
         </Field>
+        {objectives.length > 0 ? (
+          <div aria-live="polite">
+            <p className="text-xs font-medium text-fg-3">
+              {objectives.length === 1
+                ? "1 objetivo será criado"
+                : `${objectives.length} objetivos serão criados`}
+            </p>
+            <ol className="mt-2 flex flex-col gap-1.5">
+              {objectives.map((item, i) => (
+                <li
+                  key={`${item}-${i}`}
+                  className={cn(
+                    "flex items-start gap-2 text-sm",
+                    item.length > MAX_OBJECTIVE_LENGTH ? "text-loss" : "text-fg-2",
+                  )}
+                >
+                  <span className="tabular mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-surface-3 text-xs font-semibold text-fg-2">
+                    {i + 1}
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ol>
+          </div>
+        ) : null}
       </div>
       <Field
         label="Desafio"

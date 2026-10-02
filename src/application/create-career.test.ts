@@ -32,6 +32,23 @@ describe("createCareer", () => {
     expect(career.events[0]?.title).toBe("Começa a carreira no Mirassol");
   });
 
+  it("cria um objetivo para cada item listado", () => {
+    const result = createCareer(
+      {
+        ...input,
+        objective: "Conquistar a Champions League, virar ídolo do clube; ganhar uma Copa do Mundo",
+        challenge: "",
+      },
+      { today: "2026-10-02", createId: sequentialIds() },
+    );
+    if (!result.ok) throw result.error;
+    expect(result.value.objectives.map((o) => o.title)).toEqual([
+      "Conquistar a Champions League",
+      "Virar ídolo do clube",
+      "Ganhar uma Copa do Mundo",
+    ]);
+  });
+
   it("valida campos obrigatórios", () => {
     const result = createCareer(
       { ...input, firstName: "K", archetypeId: "inexistente" },

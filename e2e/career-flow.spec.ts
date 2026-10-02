@@ -29,13 +29,24 @@ test("cria carreira, registra partida e vê painel e timeline atualizados", asyn
   await page.getByRole("button", { name: "Continuar" }).click();
 
   // Etapa 4 — objetivo
-  await page.getByRole("button", { name: "Chegar à seleção principal" }).click();
+  // Etapa 4 — vários objetivos em um texto longo (cada um vira um objetivo)
+  await page
+    .getByLabel("Objetivos")
+    .fill(
+      "Conquistar a Champions League, ser vendido para uma das 5 ligas grandes, virar idolo de algum clube, bater recorde de assistencias, chegar na selação principal e ganhar uma copa do mundo",
+    );
+  await expect(page.getByText("5 objetivos serão criados")).toBeVisible();
   await page.getByRole("button", { name: "Começar carreira" }).click();
 
   // Home da nova carreira: estado vazio
   await expect(page).toHaveURL("/");
   await expect(page.getByRole("heading", { level: 1, name: "Kauã Siqueira" })).toBeVisible();
   await expect(page.getByText("Nenhuma partida ainda")).toBeVisible();
+  await expect(page.getByText("Conquistar a Champions League")).toBeVisible();
+  await page.getByText("Ver mais 1").click();
+  await expect(
+    page.getByText("Chegar na selação principal e ganhar uma copa do mundo"),
+  ).toBeVisible();
 
   // Registrar partida
   await page.getByRole("link", { name: "Registrar primeira partida" }).click();

@@ -221,7 +221,21 @@ export function ObjectivesCard({ objectives }: { objectives: Objective[] }) {
               <ObjectiveItem key={o.id} objective={o} />
             ))}
           </ul>
-        ) : (
+        ) : null}
+        {objectives.length > 4 ? (
+          <details className="group mt-4">
+            <summary className="inline-flex min-h-9 items-center text-sm font-medium text-fg-2 hover:text-fg">
+              <span className="group-open:hidden">Ver mais {objectives.length - 4}</span>
+              <span className="hidden group-open:inline">Mostrar menos</span>
+            </summary>
+            <ul className="mt-3 flex flex-col gap-4">
+              {objectives.slice(4).map((o) => (
+                <ObjectiveItem key={o.id} objective={o} />
+              ))}
+            </ul>
+          </details>
+        ) : null}
+        {objectives.length > 0 ? null : (
           <p className="text-sm text-fg-3">Nenhum objetivo definido.</p>
         )}
       </CardBody>
