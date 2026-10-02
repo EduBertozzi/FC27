@@ -17,6 +17,7 @@ import { useActiveCareer } from "@/state/career-store";
 import { useCareerOverview } from "@/state/selectors";
 
 import { AwardsCard, RecordsCard, TrophiesCard } from "../career/honours";
+import { UpdateOverallDialog } from "../career/update-overall-dialog";
 import { ClubCrest } from "../football/club-crest";
 import { NationTag } from "../football/nation-tag";
 import { OverallSeal } from "../football/overall-seal";
@@ -86,16 +87,19 @@ function Profile() {
               <p className="mt-3 max-w-xl text-sm text-fg-3">{career.concept}</p>
             ) : null}
           </div>
-          <div className="flex items-end gap-4">
-            <OverallSeal value={player.overall} size="lg" />
-            {player.potential ? (
-              <div className="pb-1 text-left">
-                <p className="text-xs text-fg-3">Potencial</p>
-                <p className="tabular font-display text-3xl font-bold text-fg-2">
-                  {player.potential}
-                </p>
-              </div>
-            ) : null}
+          <div className="flex flex-col items-center gap-3 sm:items-end">
+            <div className="flex items-end gap-4">
+              <OverallSeal value={player.overall} size="lg" />
+              {player.potential ? (
+                <div className="pb-1 text-left">
+                  <p className="text-xs text-fg-3">Potencial</p>
+                  <p className="tabular font-display text-3xl font-bold text-fg-2">
+                    {player.potential}
+                  </p>
+                </div>
+              ) : null}
+            </div>
+            <UpdateOverallDialog />
           </div>
         </div>
       </section>

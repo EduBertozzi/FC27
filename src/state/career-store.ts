@@ -6,6 +6,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 import { createCareer } from "@/application/create-career";
 import { type RegisterMatchOutcome, registerMatch } from "@/application/register-match";
+import { type UpdateOverallOutcome, updateOverall } from "@/application/update-overall";
 import { type Career } from "@/domain/career/career";
 import { createDemoCareer, DEMO_CAREER_ID, DEMO_TODAY } from "@/data/mock-career";
 import { createId } from "@/lib/id";
@@ -24,6 +25,7 @@ interface CareerState {
   setActiveCareer: (id: string) => void;
   registerMatch: (input: unknown) => Result<RegisterMatchOutcome, AppError>;
   createCareer: (input: unknown) => Result<Career, AppError>;
+  updateOverall: (input: unknown) => Result<UpdateOverallOutcome, AppError>;
   resetDemo: () => void;
 }
 
@@ -73,6 +75,19 @@ export const useCareerStore = create<CareerState>()(
             activeCareerId: result.value.id,
           }));
           logger.info("career.created", { careerId: result.value.id });
+        }
+        return result;
+      },
+      updateOverall: (input) => {
+        const career = get().careers[get().activeCareerId];
+        if (!career) throw new Error("Nenhuma carreira ativa");
+        const result = updateOverall(career, input, createId);
+        if (result.ok) {
+          set((s) => ({ careers: { ...s.careers, [career.id]: result.value.career } }));
+          logger.info("overall.updated", {
+            careerId: career.id,
+            overall: result.value.career.player.overall,
+          });
         }
         return result;
       },

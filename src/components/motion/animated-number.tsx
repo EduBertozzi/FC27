@@ -14,6 +14,8 @@ export function AnimatedNumber({ value, decimals = 0, className }: AnimatedNumbe
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true });
   const reduced = useReducedMotion();
+  // Na primeira vez conta a partir de 0; depois, anima do valor anterior para o novo.
+  const from = useRef(0);
   const format = (n: number) =>
     n.toLocaleString("pt-BR", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
 
@@ -24,13 +26,14 @@ export function AnimatedNumber({ value, decimals = 0, className }: AnimatedNumbe
       node.textContent = format(value);
       return;
     }
-    const controls = animate(0, value, {
+    const controls = animate(from.current, value, {
       duration: 1.1,
       ease: [0.22, 1, 0.36, 1],
       onUpdate: (latest) => {
         node.textContent = format(latest);
       },
     });
+    from.current = value;
     return () => controls.stop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView, value, decimals, reduced]);

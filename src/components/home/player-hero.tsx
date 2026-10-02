@@ -6,6 +6,7 @@ import { ageAt, displayName, fullName } from "@/domain/player/player";
 import { POSITIONS } from "@/domain/player/positions";
 import { formatMarketValue } from "@/lib/format";
 
+import { UpdateOverallDialog } from "../career/update-overall-dialog";
 import { ClubCrest } from "../football/club-crest";
 import { NationTag } from "../football/nation-tag";
 import { AnimatedNumber } from "../motion/animated-number";
@@ -48,11 +49,15 @@ export function PlayerHero({ career, today }: { career: Career; today: string })
               <AnimatedNumber value={player.overall} />
             </p>
           </div>
-          <p className="pb-1 text-right text-sm text-fg-2">
-            de <span className="tabular font-semibold text-fg">{history[0] ?? player.overall}</span>
-            <br />
-            em {career.overallHistory[0]?.date.slice(0, 4) ?? ""}
-          </p>
+          <div className="flex flex-col items-end gap-3">
+            <UpdateOverallDialog />
+            <p className="pb-1 text-right text-sm text-fg-2">
+              de{" "}
+              <span className="tabular font-semibold text-fg">{history[0] ?? player.overall}</span>
+              <br />
+              em {career.overallHistory[0]?.date.slice(0, 4) ?? ""}
+            </p>
+          </div>
         </div>
         <Sparkline
           values={history}
