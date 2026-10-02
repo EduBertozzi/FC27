@@ -17,6 +17,8 @@ const ROUTES = [
 
 for (const route of ROUTES) {
   test(`a11y (WCAG 2.2 AA) em ${route}`, async ({ page }) => {
+    // Sem animações de entrada: o axe mede contraste com opacidade final.
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto(route);
     await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
     const results = await new AxeBuilder({ page })

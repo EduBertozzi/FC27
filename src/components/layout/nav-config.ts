@@ -46,7 +46,7 @@ export const MOBILE_TABS: NavItem[] = [
 ];
 
 export const MORE_NAV: NavItem[] = [
-  { href: "/partidas", label: "Partidas", icon: CalendarClock },
+  { href: "/partidas", label: "Partidas", icon: CalendarClock, match: /^\/partidas(?!\/nova)/ },
   { href: "/noticias", label: "Notícias", icon: Newspaper },
   { href: "/jogador", label: "Perfil do jogador", icon: UserRound },
   { href: "/assistente", label: "Assistente", icon: MessageCircle },

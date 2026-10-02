@@ -33,7 +33,7 @@ export function CareerSwitcher({ className }: { className?: string }) {
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          "flex w-full items-center gap-3 rounded-md border border-line bg-surface-1 p-2.5 text-left transition-colors hover:border-line-strong hover:bg-surface-2",
+          "flex w-full items-center gap-3 rounded-md bg-surface-2 p-2.5 text-left transition-colors hover:bg-surface-3",
           className,
         )}
         aria-label={`Carreira ativa: ${displayName(career.player)}. Trocar de carreira`}

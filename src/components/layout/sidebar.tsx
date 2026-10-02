@@ -1,6 +1,7 @@
 "use client";
 
 import { Mic, Plus } from "lucide-react";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -20,15 +21,20 @@ function NavLink({ item, pathname }: { item: NavItem; pathname: string }) {
       href={item.href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex h-10 items-center gap-3 rounded-sm px-3 text-sm font-medium transition-colors",
-        active ? "bg-surface-2 text-fg" : "text-fg-2 hover:bg-surface-1 hover:text-fg",
+        "relative flex h-10 items-center gap-3 rounded-full px-3.5 text-sm font-medium transition-colors",
+        active ? "text-on-accent" : "text-fg-2 hover:bg-surface-2 hover:text-fg",
       )}
     >
-      <Icon
-        className={cn("size-[18px]", active ? "text-accent" : "text-fg-3")}
-        aria-hidden="true"
-      />
-      {item.label}
+      {active ? (
+        <motion.span
+          layoutId="sidebar-active"
+          transition={{ type: "spring", stiffness: 420, damping: 36 }}
+          className="absolute inset-0 rounded-full bg-white"
+          aria-hidden="true"
+        />
+      ) : null}
+      <Icon className="relative size-[18px]" aria-hidden="true" />
+      <span className="relative">{item.label}</span>
     </Link>
   );
 }
@@ -36,7 +42,7 @@ function NavLink({ item, pathname }: { item: NavItem; pathname: string }) {
 export function Sidebar() {
   const pathname = usePathname();
   return (
-    <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-line bg-bg lg:flex">
+    <aside className="glass sticky top-3 m-3 mr-0 hidden h-[calc(100dvh-1.5rem)] w-64 shrink-0 flex-col rounded-lg lg:flex">
       <div className="px-5 pt-6 pb-5">
         <Link
           href="/"
@@ -75,7 +81,7 @@ export function Sidebar() {
           ))}
         </ul>
       </nav>
-      <div className="flex flex-col gap-2 border-t border-line p-3">
+      <div className="flex flex-col gap-2 p-3">
         <Button asChild>
           <Link href="/partidas/nova">
             <Plus className="size-5" aria-hidden="true" />

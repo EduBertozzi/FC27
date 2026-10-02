@@ -4,18 +4,13 @@ import { cn } from "@/lib/cn";
 export function LogoMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" className={cn("size-8", className)} aria-hidden="true">
-      <rect x="2" y="9" width="28" height="14" rx="3" fill="var(--accent)" />
+      <rect x="1" y="1" width="30" height="30" rx="9" fill="#ffffff" />
+      <rect x="6" y="11" width="20" height="10" rx="2.5" fill="var(--bg)" />
       <path
-        d="M2 12.5h28M2 19.5h28"
-        stroke="var(--on-accent)"
-        strokeOpacity="0.25"
-        strokeWidth="1"
-      />
-      <path
-        d="M19.2 12.6a4.4 4.4 0 1 0 0 6.8"
+        d="M18.4 13.6a3.3 3.3 0 1 0 0 4.8"
         fill="none"
-        stroke="var(--on-accent)"
-        strokeWidth="2.6"
+        stroke="#ffffff"
+        strokeWidth="2"
         strokeLinecap="round"
       />
     </svg>
@@ -26,8 +21,11 @@ export function Logo({ className }: { className?: string }) {
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
       <LogoMark />
-      <span className="font-display text-xl leading-none font-bold tracking-wide text-fg">
-        FC Career <span className="font-medium text-fg-2">Companion</span>
+      <span className="flex flex-col leading-tight">
+        <span className="text-[1.0625rem] font-semibold tracking-tight text-fg">
+          Career Companion
+        </span>
+        <span className="text-xs text-fg-3">Modo Carreira de Atleta</span>
       </span>
     </span>
   );

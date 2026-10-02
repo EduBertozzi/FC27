@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, Mic, Save } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import { useId, useMemo, useRef, useState } from "react";
 
 import { type RegisterMatchOutcome } from "@/application/register-match";
@@ -56,6 +57,7 @@ function Section({
 
 export function MatchForm({ career, today, prefill, startWithVoice, onSaved }: MatchFormProps) {
   const register = useCareerStore((s) => s.registerMatch);
+  const reduceMotion = useReducedMotion();
   const [values, setValues] = useState(() => initialValues(today, prefill));
   const [errors, setErrors] = useState<FieldErrors>({});
   const [voiceOpen, setVoiceOpen] = useState(!!startWithVoice);
@@ -97,24 +99,41 @@ export function MatchForm({ career, today, prefill, startWithVoice, onSaved }: M
 
   return (
     <form onSubmit={submit} noValidate className="flex flex-col gap-4">
-      <button
-        type="button"
-        onClick={() => setVoiceOpen(true)}
-        className="flex items-center gap-4 rounded-md border border-ai/30 bg-ai-soft p-4 text-left transition-colors hover:border-ai/60"
+      <section
+        aria-labelledby="voice-cta"
+        className="glass pitch-lines flex flex-col items-center gap-4 rounded-lg px-5 py-7 text-center"
       >
-        <span
-          className="grid size-12 shrink-0 place-items-center rounded-full bg-ai text-on-accent"
-          aria-hidden="true"
+        <motion.button
+          type="button"
+          onClick={() => setVoiceOpen(true)}
+          aria-label="Registrar por voz"
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.94 }}
+          animate={
+            reduceMotion
+              ? undefined
+              : {
+                  boxShadow: [
+                    "0 0 0 0px rgb(170 184 255 / 0.28)",
+                    "0 0 0 18px rgb(170 184 255 / 0)",
+                  ],
+                }
+          }
+          transition={{ boxShadow: { duration: 2.2, repeat: Infinity, ease: "easeOut" } }}
+          className="grid size-24 place-items-center rounded-full border border-white/40 text-white [background:radial-gradient(circle_at_35%_30%,rgb(255_255_255/0.7)_0%,rgb(150_170_255/0.6)_45%,rgb(80_100_230/0.75)_100%)]"
         >
-          <Mic className="size-6" />
-        </span>
-        <span className="min-w-0">
-          <span className="block font-semibold text-fg">Registrar por voz</span>
-          <span className="block text-sm text-fg-2">
-            Fale como foi o jogo. Você confere tudo antes de salvar.
-          </span>
-        </span>
-      </button>
+          <Mic className="size-10" strokeWidth={1.8} aria-hidden="true" />
+        </motion.button>
+        <div>
+          <h2 id="voice-cta" className="text-xl font-bold">
+            Conta como foi
+          </h2>
+          <p className="mt-1 text-sm text-fg-2">
+            Fale do jeito que contaria a um amigo. Você confere tudo antes de salvar.
+          </p>
+        </div>
+        <span className="text-xs font-medium text-fg-3">ou preencha abaixo</span>
+      </section>
 
       {voiceApplied ? (
         <InlineAlert tone="success" title="Dados da voz aplicados">
@@ -383,7 +402,7 @@ export function MatchForm({ career, today, prefill, startWithVoice, onSaved }: M
         ) : null}
       </Section>
 
-      <div className="safe-bottom sticky bottom-16 z-20 -mx-4 border-t border-line bg-bg/95 px-4 py-3 backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 lg:bottom-0">
+      <div className="sticky bottom-[calc(5.75rem+env(safe-area-inset-bottom))] z-20 sm:static">
         <Button type="submit" size="lg" className="w-full sm:w-auto">
           <Save className="size-5" aria-hidden="true" />
           Salvar partida

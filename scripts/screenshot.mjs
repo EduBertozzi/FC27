@@ -18,9 +18,9 @@ for (const [name, viewport] of Object.entries(viewports)) {
   page.on("pageerror", (e) => errors.push(e.message));
   for (const route of routes.length ? routes : ["/"]) {
     await page.goto(baseUrl + route, { waitUntil: "networkidle" });
-    await page.waitForTimeout(400);
+    await page.waitForTimeout(1800);
     const file = `${outDir}/${name}${route.replaceAll("/", "_") || "_home"}.png`;
-    await page.screenshot({ path: file, fullPage: true });
+    await page.screenshot({ path: file, fullPage: process.env.SHOT_FULL !== "0" });
     console.log("saved", file);
   }
   if (errors.length) console.log(`[${name}] console errors:\n` + errors.join("\n"));

@@ -137,7 +137,7 @@ function Chat() {
         <div ref={endRef} />
       </div>
 
-      <div className="safe-bottom sticky bottom-16 -mx-4 flex flex-col gap-3 border-t border-line bg-bg/95 px-4 pt-3 pb-3 backdrop-blur sm:mx-0 sm:rounded-lg sm:border sm:px-3 lg:bottom-4">
+      <div className="sticky bottom-[calc(5.75rem+env(safe-area-inset-bottom))] flex flex-col gap-3 rounded-lg border border-line bg-sheet p-3 backdrop-blur-2xl lg:bottom-4">
         {lastAssistant?.suggestions && status !== "thinking" ? (
           <div
             className="-mx-1 flex scrollbar-none gap-2 overflow-x-auto px-1"

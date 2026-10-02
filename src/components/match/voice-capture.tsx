@@ -175,7 +175,7 @@ export function VoiceCapture({
             <button
               type="button"
               onClick={startRecording}
-              className="grid size-24 place-items-center rounded-full bg-ai text-on-accent shadow-[0_0_0_10px_var(--ai-soft)] transition-transform active:scale-95"
+              className="grid size-28 place-items-center rounded-full border border-white/40 text-white shadow-[0_0_0_14px_rgb(170_184_255/0.12),0_0_0_32px_rgb(170_184_255/0.06)] transition-transform [background:radial-gradient(circle_at_35%_30%,rgb(255_255_255/0.7)_0%,rgb(150_170_255/0.6)_45%,rgb(80_100_230/0.75)_100%)] active:scale-95"
             >
               <Mic className="size-10" aria-hidden="true" />
               <span className="sr-only">Começar a gravar</span>

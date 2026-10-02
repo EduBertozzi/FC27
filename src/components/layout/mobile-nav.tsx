@@ -1,6 +1,7 @@
 "use client";
 
 import { Menu, Plus } from "lucide-react";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -12,6 +13,19 @@ import { Dialog, DialogContent } from "../ui/dialog";
 import { CareerSwitcher } from "./career-switcher";
 import { MOBILE_TABS, MORE_NAV, isActive, type NavItem } from "./nav-config";
 
+const SPRING = { type: "spring", stiffness: 420, damping: 34 } as const;
+
+function TabIndicator() {
+  return (
+    <motion.span
+      layoutId="mobile-tab"
+      transition={SPRING}
+      className="absolute inset-0 rounded-full bg-white/16"
+      aria-hidden="true"
+    />
+  );
+}
+
 function Tab({ item, pathname }: { item: NavItem; pathname: string }) {
   const active = isActive(item, pathname);
   const Icon = item.icon;
@@ -20,17 +34,18 @@ function Tab({ item, pathname }: { item: NavItem; pathname: string }) {
       href={item.href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex h-full flex-1 flex-col items-center justify-center gap-1 text-[0.6875rem] font-medium",
-        active ? "text-fg" : "text-fg-3",
+        "relative flex h-13 flex-1 flex-col items-center justify-center gap-0.5 rounded-full text-[0.625rem] font-semibold",
+        active ? "text-fg" : "text-fg-2",
       )}
     >
-      <Icon className={cn("size-[22px]", active && "text-accent")} aria-hidden="true" />
-      {item.label}
+      {active ? <TabIndicator /> : null}
+      <Icon className="relative size-[22px]" strokeWidth={active ? 2.4 : 2} aria-hidden="true" />
+      <span className="relative">{item.label}</span>
     </Link>
   );
 }
 
-/** Navegação inferior do mobile: 4 destinos + ação central de registro. */
+/** Barra de abas flutuante em vidro (mobile): 3 destinos, ação central e "Mais". */
 export function MobileNav() {
   const pathname = usePathname();
   const [moreOpen, setMoreOpen] = useState(false);
@@ -38,23 +53,25 @@ export function MobileNav() {
 
   return (
     <>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-30 h-28 bg-gradient-to-t from-bg via-bg/70 to-transparent lg:hidden"
+      />
       <nav
         aria-label="Principal"
-        className="safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg/95 backdrop-blur lg:hidden"
+        className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-40 lg:hidden"
       >
-        <div className="flex h-16 items-stretch">
+        <div className="flex items-center gap-1 rounded-full border border-line bg-[rgb(14_20_36/0.86)] p-1.5 shadow-(--shadow-pop) backdrop-blur-2xl backdrop-saturate-150">
           {MOBILE_TABS.slice(0, 2).map((item) => (
             <Tab key={item.href} item={item} pathname={pathname} />
           ))}
-          <div className="flex flex-1 items-center justify-center">
-            <Link
-              href="/partidas/nova"
-              aria-label="Registrar partida"
-              className="-mt-6 grid size-14 place-items-center rounded-full bg-accent text-on-accent shadow-[0_0_0_6px_var(--bg)] transition-transform active:scale-95"
-            >
-              <Plus className="size-7" aria-hidden="true" />
-            </Link>
-          </div>
+          <Link
+            href="/partidas/nova"
+            aria-label="Registrar partida"
+            className="mx-1 grid size-13 shrink-0 place-items-center rounded-full bg-white text-on-accent shadow-[0_6px_18px_rgb(255_255_255/0.25)] transition-transform active:scale-90"
+          >
+            <Plus className="size-6" strokeWidth={2.6} aria-hidden="true" />
+          </Link>
           {MOBILE_TABS.slice(2).map((item) => (
             <Tab key={item.href} item={item} pathname={pathname} />
           ))}
@@ -63,12 +80,13 @@ export function MobileNav() {
             onClick={() => setMoreOpen(true)}
             aria-haspopup="dialog"
             className={cn(
-              "flex h-full flex-1 flex-col items-center justify-center gap-1 text-[0.6875rem] font-medium",
-              moreActive ? "text-fg" : "text-fg-3",
+              "relative flex h-13 flex-1 flex-col items-center justify-center gap-0.5 rounded-full text-[0.625rem] font-semibold",
+              moreActive ? "text-fg" : "text-fg-2",
             )}
           >
-            <Menu className={cn("size-[22px]", moreActive && "text-accent")} aria-hidden="true" />
-            Mais
+            {moreActive ? <TabIndicator /> : null}
+            <Menu className="relative size-[22px]" aria-hidden="true" />
+            <span className="relative">Mais</span>
           </button>
         </div>
       </nav>
@@ -87,16 +105,13 @@ export function MobileNav() {
                       onClick={() => setMoreOpen(false)}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "flex h-20 flex-col justify-between rounded-md border p-3 text-sm font-medium",
+                        "flex h-22 flex-col justify-between rounded-md p-3.5 text-sm font-semibold transition-colors",
                         active
-                          ? "border-accent/50 bg-surface-2 text-fg"
-                          : "border-line bg-surface-2/50 text-fg-2",
+                          ? "bg-white text-on-accent"
+                          : "bg-surface-2 text-fg hover:bg-surface-3",
                       )}
                     >
-                      <Icon
-                        className={cn("size-5", active ? "text-accent" : "text-fg-3")}
-                        aria-hidden="true"
-                      />
+                      <Icon className="size-5" aria-hidden="true" />
                       {item.label}
                     </Link>
                   </li>

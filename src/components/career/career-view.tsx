@@ -35,7 +35,7 @@ function KpiCard({ line, career, scope }: { line: StatLine; career: Career; scop
   return (
     <Card>
       <CardBody className="flex flex-col gap-6 sm:py-6">
-        <StatGrid className="grid-cols-2 sm:grid-cols-4 lg:grid-cols-8">
+        <StatGrid className="grid-cols-2 gap-y-6 sm:grid-cols-4">
           <Stat label="Jogos" value={line.appearances} />
           <Stat label="Titular" value={line.starts} />
           <Stat label="Minutos" value={formatNumber(line.minutes)} />

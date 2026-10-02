@@ -1,144 +1,96 @@
-import { CalendarDays, FileSignature, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import Link from "next/link";
 
 import { type Career } from "@/domain/career/career";
-import { type MatchResult } from "@/domain/match/match";
 import { ageAt, displayName, fullName } from "@/domain/player/player";
 import { POSITIONS } from "@/domain/player/positions";
-import { findArchetype } from "@/domain/player/archetypes";
-import { type StatLine } from "@/domain/stats/stats";
-import { formatMarketValue, formatRating } from "@/lib/format";
+import { formatMarketValue } from "@/lib/format";
 
 import { ClubCrest } from "../football/club-crest";
-import { FormGuide } from "../football/form-guide";
 import { NationTag } from "../football/nation-tag";
-import { OverallSeal } from "../football/overall-seal";
-import { Badge } from "../ui/badge";
+import { AnimatedNumber } from "../motion/animated-number";
+import { RevealItem } from "../motion/reveal";
+import { Sparkline } from "../motion/sparkline";
 
-interface PlayerHeroProps {
-  career: Career;
-  season: StatLine;
-  form: MatchResult[];
-  today: string;
-}
-
-/** O cartão do jogador: o elemento mais marcante do app (camisa gigante + linhas do campo). */
-export function PlayerHero({ career, season, form, today }: PlayerHeroProps) {
+/** Cabeçalho da carreira: nome grande e o cartão de overall com a evolução. */
+export function PlayerHero({ career, today }: { career: Career; today: string }) {
   const { player } = career;
-  const archetype = findArchetype(player.archetypeId);
+  const history = career.overallHistory.map((p) => p.overall);
+  const delta = history.length > 1 ? (history.at(-1) ?? 0) - (history.at(-2) ?? 0) : 0;
   const hasNickname = !!player.nickname && player.nickname !== fullName(player);
-  const ovrDelta = (() => {
-    const history = career.overallHistory;
-    if (history.length < 2) return 0;
-    return (history.at(-1)?.overall ?? 0) - (history.at(-2)?.overall ?? 0);
-  })();
 
   return (
-    <section
-      aria-labelledby="hero-name"
-      className="relative overflow-hidden rounded-lg border border-line bg-surface-1"
-    >
-      <div className="pitch-lines absolute inset-0" aria-hidden="true" />
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute top-24 -right-6 font-display text-[11rem] leading-none font-bold text-transparent select-none [-webkit-text-stroke:2px_rgb(246_185_64/0.22)] sm:-top-12 sm:right-40 sm:text-[17rem]"
-      >
-        {player.shirtNumber}
-      </span>
+    <>
+      <RevealItem className="col-span-2 flex flex-col gap-1 px-1 pb-2 lg:col-span-12">
+        <Link
+          href="/jogador"
+          className="flex w-fit items-center gap-2 rounded-full text-sm font-medium text-fg-2 hover:text-fg"
+        >
+          <ClubCrest name={career.currentClub} size="sm" />
+          {career.currentClub} · Temporada {career.currentSeason}
+        </Link>
+        <h1 id="hero-name" className="text-4xl font-bold tracking-tight sm:text-5xl">
+          {displayName(player)}
+        </h1>
+        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-fg-2">
+          <NationTag code={player.nationalityCode} />
+          {POSITIONS[player.position].name} · camisa {player.shirtNumber} ·{" "}
+          {ageAt(player.birthDate, today)} anos
+          {hasNickname ? <span className="text-fg-3">({fullName(player)})</span> : null}
+        </p>
+      </RevealItem>
 
-      <div className="relative flex flex-col gap-6 p-5 sm:p-7">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2 text-sm text-fg-2">
-              <NationTag code={player.nationalityCode} />
-              <Badge tone="accent">{player.position}</Badge>
-              <span>{POSITIONS[player.position].name}</span>
-              <span className="text-fg-3" aria-hidden="true">
-                /
-              </span>
-              <span>{ageAt(player.birthDate, today)} anos</span>
-            </div>
-            <h1
-              id="hero-name"
-              className="mt-3 font-display text-5xl leading-[0.9] font-bold tracking-tight text-fg sm:text-6xl"
-            >
-              {displayName(player)}
-            </h1>
-            <p className="mt-2 text-fg-2">
-              {hasNickname ? `${fullName(player)}, ` : ""}
-              {archetype ? archetype.name.toLowerCase() : "jogador"} com a camisa{" "}
-              {player.shirtNumber}
+      <RevealItem className="glass pitch-lines relative col-span-2 flex flex-col justify-between gap-5 overflow-hidden rounded-lg p-6 lg:col-span-5 lg:row-span-2">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-sm font-medium text-fg-2">Overall</p>
+            <p className="tabular text-7xl leading-none font-bold tracking-tighter">
+              <AnimatedNumber value={player.overall} />
             </p>
           </div>
-          <div className="flex shrink-0 flex-col items-center gap-1.5">
-            <OverallSeal value={player.overall} size="lg" />
-            {ovrDelta > 0 ? (
-              <span className="inline-flex items-center gap-1 text-xs font-semibold text-win">
-                <TrendingUp className="size-3.5" aria-hidden="true" />+{ovrDelta}
-                <span className="sr-only"> desde a última atualização</span>
-              </span>
-            ) : null}
-          </div>
+          <p className="pb-1 text-right text-sm text-fg-2">
+            de <span className="tabular font-semibold text-fg">{history[0] ?? player.overall}</span>
+            <br />
+            em {career.overallHistory[0]?.date.slice(0, 4) ?? ""}
+          </p>
         </div>
-
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-          <Link href="/jogador" className="flex items-center gap-3 rounded-sm">
-            <ClubCrest name={career.currentClub} size="lg" />
-            <span>
-              <span className="block font-display text-2xl leading-tight font-semibold text-fg">
-                {career.currentClub}
-              </span>
-              <span className="flex items-center gap-1.5 text-sm text-fg-3">
-                <CalendarDays className="size-3.5" aria-hidden="true" />
-                Temporada {career.currentSeason}
-              </span>
-            </span>
-          </Link>
+        <Sparkline
+          values={history}
+          width={420}
+          height={96}
+          className="h-auto w-full"
+          label={`Overall de ${history[0] ?? player.overall} para ${player.overall}`}
+        />
+        <div className="flex flex-wrap items-end justify-between gap-3">
           <dl className="flex gap-6 text-sm">
+            {player.potential ? (
+              <div>
+                <dt className="text-fg-3">Potencial</dt>
+                <dd className="tabular text-xl font-semibold">{player.potential}</dd>
+              </div>
+            ) : null}
             <div>
-              <dt className="text-fg-3">Valor de mercado</dt>
-              <dd className="tabular font-display text-xl font-semibold text-fg">
+              <dt className="text-fg-3">Valor</dt>
+              <dd className="tabular text-xl font-semibold">
                 {formatMarketValue(career.marketValue)}
               </dd>
             </div>
             {career.contractUntil ? (
-              <div className="hidden sm:block">
-                <dt className="flex items-center gap-1 text-fg-3">
-                  <FileSignature className="size-3.5" aria-hidden="true" />
-                  Contrato
-                </dt>
-                <dd className="tabular font-display text-xl font-semibold text-fg">
-                  até {career.contractUntil.slice(0, 4)}
+              <div>
+                <dt className="text-fg-3">Contrato</dt>
+                <dd className="tabular text-xl font-semibold">
+                  {career.contractUntil.slice(0, 4)}
                 </dd>
               </div>
             ) : null}
           </dl>
+          {delta > 0 ? (
+            <span className="inline-flex items-center gap-1 rounded-full bg-win-soft px-2.5 py-1 text-xs font-semibold text-win">
+              <TrendingUp className="size-3.5" aria-hidden="true" />+{delta} recente
+            </span>
+          ) : null}
         </div>
-
-        <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-5">
-          {[
-            { label: "Jogos", value: season.appearances },
-            { label: "Gols", value: season.goals, accent: true },
-            { label: "Assistências", value: season.assists },
-            { label: "Nota média", value: formatRating(season.averageRating) },
-          ].map((s) => (
-            <div key={s.label} className="flex flex-col bg-surface-1/95 px-4 py-3">
-              <dt className="order-2 text-xs text-fg-3">{s.label}</dt>
-              <dd
-                className={`tabular order-1 font-display text-4xl leading-none font-bold ${s.accent ? "text-accent" : "text-fg"}`}
-              >
-                {s.value}
-              </dd>
-            </div>
-          ))}
-          <div className="col-span-2 flex flex-col justify-center gap-1.5 bg-surface-1/95 px-4 py-3 sm:col-span-1">
-            <dt className="order-2 text-xs text-fg-3">Forma recente</dt>
-            <dd className="order-1">
-              <FormGuide results={form} size="sm" />
-            </dd>
-          </div>
-        </dl>
-      </div>
-    </section>
+      </RevealItem>
+    </>
   );
 }
