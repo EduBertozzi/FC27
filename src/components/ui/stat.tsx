@@ -17,7 +17,7 @@ export function Stat({ label, value, sub, emphasis, className }: StatProps) {
       <dt className="order-2 truncate text-xs font-medium text-fg-3 sm:text-sm">{label}</dt>
       <dd
         className={cn(
-          "tabular order-1 font-display leading-none font-semibold",
+          "tabular order-1 font-display leading-none font-bold tracking-tight whitespace-nowrap",
           emphasis ? "text-3xl text-accent" : "text-3xl text-fg",
         )}
       >

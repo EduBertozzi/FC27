@@ -9,7 +9,7 @@ import { formatDate, formatRating } from "@/lib/format";
 import { ChartFrame, ChartTooltip, DataTable } from "./chart-frame";
 
 const HEIGHT = 200;
-const PAD = { top: 16, right: 12, bottom: 24, left: 28 };
+const PAD = { top: 22, right: 12, bottom: 24, left: 28 };
 
 /** Nota por partida com linha de média. Uma série → sem legenda; o título nomeia. */
 export function RatingChart({
@@ -95,11 +95,11 @@ export function RatingChart({
               />
               <text
                 x={width - PAD.right}
-                y={y(average) - 6}
+                y={10}
                 textAnchor="end"
                 className="fill-fg-2 text-[11px] font-medium"
               >
-                média {formatRating(average)}
+                - - média {formatRating(average)}
               </text>
             </g>
           ) : null}
@@ -126,7 +126,7 @@ export function RatingChart({
                 cy={y(activePoint.rating)}
                 r="5"
                 fill="var(--accent)"
-                stroke="var(--surface-1)"
+                stroke="var(--bg)"
                 strokeWidth="2"
               />
             </g>
@@ -136,7 +136,7 @@ export function RatingChart({
               cy={y(points.at(-1)!.rating)}
               r="4"
               fill="var(--accent)"
-              stroke="var(--surface-1)"
+              stroke="var(--bg)"
               strokeWidth="2"
             />
           ) : null}

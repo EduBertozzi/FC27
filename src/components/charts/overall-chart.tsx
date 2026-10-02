@@ -74,7 +74,7 @@ export function OverallChart({
           ) : null}
           <path
             d={`${path} V${HEIGHT - PAD.bottom} H${x(first.date)} Z`}
-            fill="rgb(246 185 64 / 0.08)"
+            fill="rgb(255 255 255 / 0.06)"
           />
           <path
             d={path}
@@ -90,7 +90,7 @@ export function OverallChart({
               cy={y(p.overall)}
               r={active === i ? 5 : 3}
               fill="var(--accent)"
-              stroke="var(--surface-1)"
+              stroke="var(--bg)"
               strokeWidth="2"
               onPointerEnter={() => setActive(i)}
             />

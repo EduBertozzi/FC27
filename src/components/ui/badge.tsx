@@ -22,7 +22,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex h-6 items-center gap-1 rounded-xs px-2 text-xs font-semibold whitespace-nowrap [&_svg]:size-3.5",
+        "inline-flex h-6 items-center gap-1 rounded-full px-2.5 text-xs font-semibold whitespace-nowrap [&_svg]:size-3.5",
         TONES[tone],
         className,
       )}
@@ -53,7 +53,7 @@ export function ResultBadge({
       aria-label={RESULT_LABEL[result]}
       title={RESULT_LABEL[result]}
       className={cn(
-        "inline-grid shrink-0 place-items-center rounded-xs font-display font-bold",
+        "inline-grid shrink-0 place-items-center rounded-full font-display font-bold",
         size === "md" ? "size-7 text-base" : "size-5 text-xs",
         RESULT_TONE[result],
         className,

@@ -3,12 +3,7 @@ import { type ComponentProps, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 export function Card({ className, ...props }: ComponentProps<"section">) {
-  return (
-    <section
-      className={cn("min-w-0 rounded-md border border-line bg-surface-1", className)}
-      {...props}
-    />
-  );
+  return <section className={cn("glass min-w-0 rounded-md", className)} {...props} />;
 }
 
 interface CardHeaderProps {
@@ -37,9 +32,7 @@ export function CardHeader({
         </span>
       ) : null}
       <div className="min-w-0 flex-1">
-        <Heading className="font-display text-lg font-semibold tracking-wide text-fg">
-          {title}
-        </Heading>
+        <Heading className="font-display text-lg font-semibold text-fg">{title}</Heading>
         {description ? <p className="mt-0.5 text-sm text-fg-3">{description}</p> : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}

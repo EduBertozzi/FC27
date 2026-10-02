@@ -39,7 +39,7 @@ export function NumberStepper({
   const name = accessibleLabel ?? label;
   const clamp = (v: number) => Math.min(max, Math.max(min, Math.round(v * 10) / 10));
   const btn = cn(
-    "grid place-items-center rounded-sm text-fg-2 transition-colors hover:bg-surface-3 hover:text-fg active:scale-95 disabled:opacity-40 disabled:hover:bg-transparent",
+    "grid place-items-center rounded-full bg-surface-2 text-fg transition-colors hover:bg-surface-3 hover:text-fg active:scale-95 disabled:opacity-40 disabled:hover:bg-transparent",
     size === "lg" ? "size-12" : size === "sm" ? "size-9" : "size-10",
   );
   return (
@@ -49,7 +49,7 @@ export function NumberStepper({
       </span>
       <div
         className={cn(
-          "flex items-center justify-between rounded-sm border bg-surface-2 p-1",
+          "flex items-center justify-between rounded-full border bg-surface-1 p-1",
           error ? "border-loss" : "border-line",
         )}
       >
@@ -91,7 +91,7 @@ export function NumberStepper({
             }
           }}
           className={cn(
-            "tabular min-w-12 rounded-xs text-center font-display font-semibold text-fg",
+            "tabular min-w-12 rounded-xs text-center font-display font-bold text-fg",
             size === "lg" ? "text-3xl" : "text-2xl",
           )}
         >

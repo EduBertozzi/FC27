@@ -11,7 +11,7 @@ export function TabsList({ className, ...props }: ComponentProps<typeof TabsPrim
   return (
     <TabsPrimitive.List
       className={cn(
-        "-mx-4 flex scrollbar-none gap-1 overflow-x-auto border-b border-line px-4 sm:mx-0 sm:px-0",
+        "-mx-4 flex scrollbar-none gap-2 overflow-x-auto px-4 sm:mx-0 sm:px-0",
         className,
       )}
       {...props}
@@ -23,9 +23,8 @@ export function TabsTrigger({ className, ...props }: ComponentProps<typeof TabsP
   return (
     <TabsPrimitive.Trigger
       className={cn(
-        "relative flex h-11 shrink-0 items-center gap-2 px-3 text-sm font-semibold text-fg-3 transition-colors hover:text-fg-2",
-        "after:absolute after:inset-x-2 after:-bottom-px after:h-0.5 after:rounded-full after:bg-transparent after:transition-colors",
-        "data-[state=active]:text-fg data-[state=active]:after:bg-accent [&_svg]:size-4",
+        "flex h-10 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-semibold text-fg-2 transition-[background-color,color] duration-200 hover:bg-surface-2 hover:text-fg",
+        "data-[state=active]:bg-white data-[state=active]:text-on-accent [&_svg]:size-4",
         className,
       )}
       {...props}

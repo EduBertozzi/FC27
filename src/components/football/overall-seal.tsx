@@ -1,12 +1,12 @@
 import { cn } from "@/lib/cn";
 
 const SIZES = {
-  sm: { box: "h-10 w-9", num: "text-lg", label: "text-[0.55rem]" },
-  md: { box: "h-16 w-14", num: "text-3xl", label: "text-[0.65rem]" },
-  lg: { box: "h-24 w-20", num: "text-5xl", label: "text-xs" },
+  sm: { box: "h-11 min-w-11 rounded-[12px] px-1.5", num: "text-lg", label: "text-[0.55rem]" },
+  md: { box: "h-16 min-w-16 rounded-[18px] px-2", num: "text-3xl", label: "text-[0.65rem]" },
+  lg: { box: "h-22 min-w-22 rounded-[24px] px-3", num: "text-5xl", label: "text-xs" },
 } as const;
 
-/** Overall em selo dourado — o elemento de progressão mais reconhecível do app. */
+/** Overall em bloco branco — o número mais importante da carreira. */
 export function OverallSeal({
   value,
   size = "md",
@@ -19,29 +19,24 @@ export function OverallSeal({
   const s = SIZES[size];
   return (
     <span
+      role="img"
+      aria-label={`Overall ${value}`}
       className={cn(
-        "relative inline-flex shrink-0 flex-col items-center justify-center text-on-accent",
+        "inline-flex shrink-0 flex-col items-center justify-center bg-white text-on-accent shadow-[0_10px_30px_rgb(0_0_0/0.35)]",
         s.box,
         className,
       )}
-      role="img"
-      aria-label={`Overall ${value}`}
     >
-      <svg
-        viewBox="0 0 56 64"
-        className="absolute inset-0 size-full"
-        aria-hidden="true"
-        preserveAspectRatio="none"
-      >
-        <path d="M28 1 54 10v26c0 14-11 23-26 27C13 59 2 50 2 36V10z" fill="var(--accent)" />
-      </svg>
       <span
-        className={cn("tabular relative font-display leading-none font-bold", s.num)}
         aria-hidden="true"
+        className={cn("tabular leading-none font-bold tracking-tight", s.num)}
       >
         {value}
       </span>
-      <span className={cn("relative font-semibold tracking-wider", s.label)} aria-hidden="true">
+      <span
+        aria-hidden="true"
+        className={cn("mt-0.5 font-semibold tracking-wider opacity-70", s.label)}
+      >
         OVR
       </span>
     </span>

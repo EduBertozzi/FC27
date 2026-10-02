@@ -38,7 +38,7 @@ export function DialogContent({
       <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-scrim backdrop-blur-[2px] data-[state=open]:animate-fade-in" />
       <DialogPrimitive.Content
         className={cn(
-          "fixed z-50 flex max-h-[92dvh] flex-col bg-surface-1 shadow-(--shadow-overlay) focus:outline-none",
+          "fixed z-50 flex max-h-[92dvh] flex-col border border-line bg-sheet shadow-(--shadow-overlay) backdrop-blur-2xl focus:outline-none",
           "inset-x-0 bottom-0 rounded-t-lg data-[state=open]:animate-sheet-up",
           "sm:inset-x-auto sm:top-1/2 sm:bottom-auto sm:left-1/2 sm:w-[calc(100vw-2rem)] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-lg sm:data-[state=open]:animate-pop-in",
           size === "md" ? "sm:max-w-lg" : "sm:max-w-2xl",

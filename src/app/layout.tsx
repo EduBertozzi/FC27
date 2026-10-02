@@ -1,10 +1,4 @@
-import "@fontsource/barlow/400.css";
-import "@fontsource/barlow/500.css";
-import "@fontsource/barlow/600.css";
-import "@fontsource/barlow/700.css";
-import "@fontsource/barlow-condensed/500.css";
-import "@fontsource/barlow-condensed/600.css";
-import "@fontsource/barlow-condensed/700.css";
+import "@fontsource-variable/inter";
 import "./globals.css";
 
 import { type Metadata, type Viewport } from "next";
@@ -19,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0e1930",
+  themeColor: "#050b18",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,

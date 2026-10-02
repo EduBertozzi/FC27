@@ -7,16 +7,16 @@ const VARIANTS = {
   primary:
     "bg-accent text-on-accent hover:bg-accent-hover active:bg-accent font-semibold disabled:bg-surface-3 disabled:text-fg-3",
   secondary:
-    "bg-surface-2 text-fg border border-line hover:bg-surface-3 hover:border-line-strong disabled:text-fg-3",
+    "bg-surface-2 text-fg border border-line backdrop-blur-xl hover:bg-surface-3 hover:border-line-strong disabled:text-fg-3",
   ghost: "text-fg-2 hover:text-fg hover:bg-surface-2 disabled:text-fg-3",
   ai: "bg-ai-soft text-ai border border-ai/30 hover:bg-ai/20 disabled:text-fg-3",
   danger: "bg-loss-soft text-loss border border-loss/30 hover:bg-loss/20",
 } as const;
 
 const SIZES = {
-  sm: "h-9 px-3 text-sm gap-1.5 rounded-sm",
-  md: "h-11 px-4 text-base gap-2 rounded-sm",
-  lg: "h-13 px-6 text-lg gap-2.5 rounded-md",
+  sm: "h-9 px-4 text-sm gap-1.5 rounded-full",
+  md: "h-11 px-5 text-base gap-2 rounded-full",
+  lg: "h-13 px-7 text-lg gap-2.5 rounded-full",
 } as const;
 
 export type ButtonVariant = keyof typeof VARIANTS;
@@ -32,7 +32,7 @@ export interface ButtonProps extends ComponentProps<"button"> {
 export function buttonClasses(variant: ButtonVariant = "primary", size: ButtonSize = "md") {
   return cn(
     "inline-flex shrink-0 items-center justify-center whitespace-nowrap select-none",
-    "transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.98]",
+    "font-semibold transition-[background-color,border-color,color,transform] duration-200 ease-out active:scale-[0.96]",
     "disabled:pointer-events-none [&_svg]:shrink-0",
     VARIANTS[variant],
     SIZES[size],

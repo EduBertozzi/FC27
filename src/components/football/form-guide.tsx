@@ -24,8 +24,7 @@ export function FormGuide({
           key={i}
           aria-hidden="true"
           className={cn(
-            i === results.length - 1 &&
-              "rounded-xs ring-2 ring-fg/60 ring-offset-2 ring-offset-surface-1",
+            i === results.length - 1 && "rounded-xs ring-2 ring-fg/60 ring-offset-2 ring-offset-bg",
           )}
         >
           <ResultBadge result={r} size={size} />

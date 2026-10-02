@@ -38,7 +38,7 @@ function ToastItem({ toast: t }: { toast: Toast }) {
     return () => clearTimeout(timer);
   }, [dismiss, t.id]);
   return (
-    <div className="pointer-events-auto flex w-full animate-sheet-up items-start gap-3 rounded-md bg-surface-2 p-3.5 shadow-(--shadow-pop) sm:w-96">
+    <div className="pointer-events-auto flex w-full animate-sheet-up items-start gap-3 rounded-md border border-line bg-sheet p-3.5 shadow-(--shadow-pop) backdrop-blur-2xl sm:w-96">
       <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-win" aria-hidden="true" />
       <div className="min-w-0 flex-1">
         <p className="font-semibold text-fg">{t.title}</p>

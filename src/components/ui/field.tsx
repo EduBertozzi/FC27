@@ -65,8 +65,8 @@ export function Field({
 }
 
 export const controlClasses = cn(
-  "w-full rounded-sm border border-line bg-surface-2 px-3 text-base text-fg placeholder:text-fg-3",
-  "transition-colors hover:border-line-strong focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:outline-none",
+  "w-full rounded-sm border border-line bg-surface-1 px-4 text-base text-fg placeholder:text-fg-3",
+  "transition-colors hover:border-line-strong focus-visible:border-white/60 focus-visible:bg-surface-2 focus-visible:ring-4 focus-visible:ring-white/10 focus-visible:outline-none",
   "disabled:opacity-60 aria-[invalid=true]:border-loss",
 );
 

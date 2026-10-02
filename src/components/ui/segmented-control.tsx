@@ -37,7 +37,7 @@ export function SegmentedControl<T extends string>({
       onValueChange={(v) => onValueChange(v as T)}
       orientation="horizontal"
       className={cn(
-        "grid auto-cols-fr grid-flow-col gap-1 rounded-sm border border-line bg-surface-2 p-1",
+        "grid auto-cols-fr grid-flow-col gap-1 rounded-full bg-surface-2 p-1",
         invalid && "border-loss",
         className,
       )}
@@ -48,8 +48,8 @@ export function SegmentedControl<T extends string>({
           key={option.value}
           value={option.value}
           className={cn(
-            "flex h-9 items-center justify-center gap-1.5 rounded-xs px-2 text-sm font-semibold text-fg-2 transition-colors",
-            "hover:text-fg data-[state=checked]:bg-surface-3 data-[state=checked]:text-fg data-[state=checked]:shadow-[inset_0_0_0_1px_var(--line-strong)]",
+            "flex h-9 items-center justify-center gap-1.5 rounded-full px-3 text-sm font-semibold text-fg-2 transition-[background-color,color,box-shadow] duration-200",
+            "hover:text-fg data-[state=checked]:bg-white data-[state=checked]:text-on-accent data-[state=checked]:shadow-[0_4px_12px_rgb(0_0_0/0.25)]",
             option.activeClassName,
             "[&_svg]:size-4",
           )}

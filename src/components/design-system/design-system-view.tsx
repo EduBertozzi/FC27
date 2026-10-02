@@ -44,45 +44,45 @@ const demo = createDemoCareer();
 
 const COLORS: { group: string; tokens: { name: string; value: string; use: string }[] }[] = [
   {
-    group: "Superfícies",
+    group: "Vidro",
     tokens: [
-      { name: "bg", value: "#0e1930", use: "Fundo do app" },
-      { name: "surface-1", value: "#14223d", use: "Cards" },
-      { name: "surface-2", value: "#1a2c4d", use: "Controles, itens" },
-      { name: "surface-3", value: "#22385f", use: "Hover, selecionado" },
-      { name: "line", value: "#2a4069", use: "Bordas" },
-      { name: "line-strong", value: "#3b5687", use: "Bordas em foco/hover" },
+      { name: "bg", value: "#050b18", use: "Fundo sólido atrás da luz ambiente" },
+      { name: "club", value: "cor do clube", use: "Tinge a luz ambiente da carreira ativa" },
+      { name: "surface-1", value: "branco 7%", use: "Cards de vidro" },
+      { name: "surface-2", value: "branco 10%", use: "Controles, itens" },
+      { name: "surface-3", value: "branco 16%", use: "Hover, selecionado" },
+      { name: "sheet", value: "#101626 88%", use: "Modais, menus, toasts" },
     ],
   },
   {
     group: "Texto",
     tokens: [
-      { name: "fg", value: "#f1f4fa", use: "Texto principal (14,4:1)" },
-      { name: "fg-2", value: "#b4c0d6", use: "Secundário (8,6:1)" },
-      { name: "fg-3", value: "#8e9fbf", use: "Terciário (5,9:1)" },
+      { name: "fg", value: "#ffffff", use: "Texto principal" },
+      { name: "fg-2", value: "branco 74%", use: "Secundário" },
+      { name: "fg-3", value: "branco 60%", use: "Terciário, legendas" },
     ],
   },
   {
-    group: "Marca e semântica",
+    group: "Ação e semântica",
     tokens: [
-      { name: "accent", value: "#f6b940", use: "Ação principal, OVR, conquista" },
-      { name: "win", value: "#34c27f", use: "Vitória, forma positiva" },
-      { name: "draw", value: "#9aa8c2", use: "Empate" },
-      { name: "loss", value: "#f4737c", use: "Derrota, erro" },
-      { name: "ai", value: "#8fa2ff", use: "Companion de IA, voz" },
-      { name: "chart-1", value: "#c07c0c", use: "Série: gols" },
-      { name: "chart-2", value: "#6577e6", use: "Série: assistências" },
+      { name: "accent", value: "#ffffff", use: "Ação principal (texto escuro sobre ele)" },
+      { name: "gold", value: "#ffd27a", use: "Conquistas, notas de destaque" },
+      { name: "win", value: "#4ade80", use: "Vitória" },
+      { name: "draw", value: "#c4c9d4", use: "Empate" },
+      { name: "loss", value: "#ff7a7a", use: "Derrota, erro" },
+      { name: "ai", value: "#aab8ff", use: "Companion de IA e voz" },
+      { name: "chart-1 / chart-2", value: "#ffc24d / #8ea6ff", use: "Gols / assistências" },
     ],
   },
 ];
 
 const TYPE_SCALE = [
-  { cls: "text-6xl", label: "6xl · 95px · display", font: "font-display font-bold" },
-  { cls: "text-4xl", label: "4xl · 49px · título de página", font: "font-display font-bold" },
-  { cls: "text-2xl", label: "2xl · 31px · seção", font: "font-display font-semibold" },
-  { cls: "text-lg", label: "lg · 20px · título de card", font: "font-display font-semibold" },
-  { cls: "text-base", label: "base · 16px · corpo", font: "" },
-  { cls: "text-sm", label: "sm · 14px · apoio", font: "" },
+  { cls: "text-6xl", label: "6xl · 80px · número de destaque", font: "font-bold tracking-tighter" },
+  { cls: "text-4xl", label: "4xl · 44px · título grande", font: "font-bold tracking-tight" },
+  { cls: "text-2xl", label: "2xl · 28px · seção", font: "font-bold" },
+  { cls: "text-lg", label: "lg · 20px · título de card", font: "font-semibold" },
+  { cls: "text-base", label: "base · 17px · corpo (iOS body)", font: "" },
+  { cls: "text-sm", label: "sm · 15px · apoio", font: "" },
   { cls: "text-xs", label: "xs · 13px · legenda", font: "" },
 ];
 
@@ -117,12 +117,12 @@ export function DesignSystemView() {
       <div className="flex flex-col gap-12">
         <PageHeader
           title="Design System"
-          description="Floodlit: tokens e componentes do FC Career Companion. Todas as telas são compostas a partir destas peças."
+          description="Glass: tokens e componentes do FC Career Companion. Todas as telas são compostas a partir destas peças."
         />
 
         <Section
           title="Cores"
-          description="Base azul-estádio, dourado de refletor como acento único. Contraste conferido contra as superfícies (WCAG AA)."
+          description="Vidro fosco sobre luz ambiente tingida pela cor do clube. Branco é a ação principal; cor só onde tem significado."
         >
           <div className="grid gap-6 lg:grid-cols-3">
             {COLORS.map((g) => (
@@ -134,7 +134,11 @@ export function DesignSystemView() {
                       <li key={t.name} className="flex items-center gap-3">
                         <span
                           className="size-10 shrink-0 rounded-sm border border-line-strong"
-                          style={{ background: t.value }}
+                          style={{
+                            background: t.value.startsWith("#")
+                              ? (t.value.split(" ")[0] ?? t.value)
+                              : "rgb(255 255 255 / 0.12)",
+                          }}
                           aria-hidden="true"
                         />
                         <div className="min-w-0 text-sm">
@@ -154,7 +158,7 @@ export function DesignSystemView() {
 
         <Section
           title="Tipografia"
-          description="Barlow Condensed para display e números (placar); Barlow para texto. Escala 1,25."
+          description="Fonte de sistema da Apple (SF Pro) com Inter como reserva. Escala baseada nos estilos dinâmicos do iOS."
         >
           <Card>
             <CardBody className="flex flex-col gap-4">
@@ -211,7 +215,7 @@ export function DesignSystemView() {
                 <div className="rounded-md border border-line bg-surface-1 p-3">
                   0 · card: borda + superfície
                 </div>
-                <div className="rounded-md bg-surface-2 p-3 shadow-(--shadow-pop)">
+                <div className="rounded-md bg-surface-2 p-3 text-fg-2 shadow-(--shadow-pop)">
                   1 · pop: dropdown, tooltip, toast
                 </div>
                 <div className="rounded-md bg-surface-1 p-3 shadow-(--shadow-overlay)">

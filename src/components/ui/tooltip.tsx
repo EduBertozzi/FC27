@@ -22,10 +22,10 @@ export function Tooltip({
         <Primitive.Content
           side={side}
           sideOffset={6}
-          className="z-50 max-w-64 rounded-sm bg-surface-3 px-2.5 py-1.5 text-xs text-fg shadow-(--shadow-pop) data-[state=delayed-open]:animate-fade-in"
+          className="z-50 max-w-64 rounded-sm bg-sheet px-2.5 py-1.5 text-xs text-fg shadow-(--shadow-pop) data-[state=delayed-open]:animate-fade-in"
         >
           {content}
-          <Primitive.Arrow className="fill-surface-3" />
+          <Primitive.Arrow className="fill-[#101626]" />
         </Primitive.Content>
       </Primitive.Portal>
     </Primitive.Root>
