@@ -22,7 +22,7 @@ export function ChartFrame({
   className?: string;
 }) {
   return (
-    <figure className={cn("flex flex-col gap-3", className)}>
+    <figure className={cn("flex min-w-0 flex-col gap-3", className)}>
       {legend && legend.length > 1 ? (
         <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-fg-2" aria-label="Legenda">
           {legend.map((item) => (

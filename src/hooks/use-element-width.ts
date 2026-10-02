@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 /** Largura real do contêiner para desenhar SVG em pixels (texto sem distorção). */
-export function useElementWidth<T extends HTMLElement>(fallback = 600) {
+export function useElementWidth<T extends HTMLElement>(fallback = 320) {
   const ref = useRef<T>(null);
   const [width, setWidth] = useState(fallback);
   useEffect(() => {

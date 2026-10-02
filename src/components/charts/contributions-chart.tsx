@@ -57,7 +57,7 @@ export function ContributionsChart({ data }: { data: MonthlyBucket[] }) {
         />
       }
     >
-      <div ref={ref} className="relative">
+      <div ref={ref} className="relative w-full min-w-0 overflow-hidden">
         <svg
           width={width}
           height={HEIGHT}

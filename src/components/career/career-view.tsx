@@ -97,7 +97,12 @@ function CompetitionTable({ career }: { career: Career }) {
         icon={<ListOrdered />}
         description={`Temporada ${career.currentSeason}`}
       />
-      <div className="overflow-x-auto px-1 pb-2">
+      <div
+        className="overflow-x-auto px-1 pb-2"
+        tabIndex={0}
+        role="region"
+        aria-label="Tabela por competição"
+      >
         <table className="tabular w-full min-w-[28rem] text-sm">
           <thead>
             <tr className="text-left text-xs text-fg-3">
@@ -151,7 +156,12 @@ function SeasonsTable({ career, current }: { career: Career; current: StatLine }
   return (
     <Card>
       <CardHeader title="Por temporada" icon={<BarChart3 />} />
-      <div className="overflow-x-auto px-1 pb-2">
+      <div
+        className="overflow-x-auto px-1 pb-2"
+        tabIndex={0}
+        role="region"
+        aria-label="Tabela por temporada"
+      >
         <table className="tabular w-full min-w-[32rem] text-sm">
           <thead>
             <tr className="text-left text-xs text-fg-3">

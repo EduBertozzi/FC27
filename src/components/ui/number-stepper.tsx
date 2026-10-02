@@ -7,6 +7,8 @@ import { cn } from "@/lib/cn";
 
 interface NumberStepperProps {
   label: string;
+  /** Nome acessível mais específico que o rótulo visível (ex.: "Gols do Benfica"). */
+  accessibleLabel?: string;
   value: number;
   onChange: (value: number) => void;
   min?: number;
@@ -22,6 +24,7 @@ interface NumberStepperProps {
 /** Contador com botões grandes — rápido no toque, acessível como spinbutton. */
 export function NumberStepper({
   label,
+  accessibleLabel,
   value,
   onChange,
   min = 0,
@@ -33,6 +36,7 @@ export function NumberStepper({
   error,
 }: NumberStepperProps) {
   const id = useId();
+  const name = accessibleLabel ?? label;
   const clamp = (v: number) => Math.min(max, Math.max(min, Math.round(v * 10) / 10));
   const btn = cn(
     "grid place-items-center rounded-sm text-fg-2 transition-colors hover:bg-surface-3 hover:text-fg active:scale-95 disabled:opacity-40 disabled:hover:bg-transparent",
@@ -54,14 +58,15 @@ export function NumberStepper({
           className={btn}
           onClick={() => onChange(clamp(value - step))}
           disabled={value <= min}
-          aria-label={`Diminuir ${label.toLowerCase()}`}
+          aria-label={`Diminuir ${name.toLowerCase()}`}
         >
           <Minus className="size-5" aria-hidden="true" />
         </button>
         <div
           role="spinbutton"
           tabIndex={0}
-          aria-labelledby={`${id}-label`}
+          aria-label={accessibleLabel}
+          aria-labelledby={accessibleLabel ? undefined : `${id}-label`}
           aria-valuenow={value}
           aria-valuemin={min}
           aria-valuemax={max}
@@ -97,7 +102,7 @@ export function NumberStepper({
           className={btn}
           onClick={() => onChange(clamp(value + step))}
           disabled={value >= max}
-          aria-label={`Aumentar ${label.toLowerCase()}`}
+          aria-label={`Aumentar ${name.toLowerCase()}`}
         >
           <Plus className="size-5" aria-hidden="true" />
         </button>

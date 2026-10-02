@@ -200,6 +200,7 @@ export function MatchForm({ career, today, prefill, startWithVoice, onSaved }: M
             <ClubCrest name={career.currentClub} />
             <NumberStepper
               label={career.currentClub}
+              accessibleLabel={`Gols do ${career.currentClub}`}
               value={values.goalsFor}
               onChange={(v) => set("goalsFor", v)}
               max={30}
@@ -217,6 +218,7 @@ export function MatchForm({ career, today, prefill, startWithVoice, onSaved }: M
             <ClubCrest name={values.opponent || "Adversário"} />
             <NumberStepper
               label={values.opponent || "Adversário"}
+              accessibleLabel={`Gols do ${values.opponent || "adversário"}`}
               value={values.goalsAgainst}
               onChange={(v) => set("goalsAgainst", v)}
               max={30}
