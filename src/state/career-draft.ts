@@ -10,6 +10,8 @@ export type CareerDraft = Partial<NewCareerInput>;
 interface DraftState {
   draft: CareerDraft | null;
   source: "surprise" | "ideas" | null;
+  /** Incrementa a cada nova ideia — o criador reinicia o formulário com ela. */
+  version: number;
   setDraft: (draft: CareerDraft, source: "surprise" | "ideas") => void;
   clear: () => void;
 }
@@ -18,7 +20,8 @@ interface DraftState {
 export const useCareerDraft = create<DraftState>((set) => ({
   draft: null,
   source: null,
-  setDraft: (draft, source) => set({ draft, source }),
+  version: 0,
+  setDraft: (draft, source) => set((s) => ({ draft, source, version: s.version + 1 })),
   clear: () => set({ draft: null, source: null }),
 }));
 
