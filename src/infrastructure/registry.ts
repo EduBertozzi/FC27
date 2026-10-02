@@ -2,11 +2,17 @@ import { MockCareerAssistant } from "./ai/mock-assistant";
 import { type CareerAssistant } from "./ai/types";
 import { MockTranscriptionProvider } from "./voice/mock-transcription";
 import { RuleBasedMatchExtractor } from "./voice/rule-based-extractor";
-import { type MatchExtractor, type TranscriptionProvider } from "./voice/types";
+import {
+  type LiveTranscriber,
+  type MatchExtractor,
+  type TranscriptionProvider,
+} from "./voice/types";
+import { WebSpeechTranscriber } from "./voice/web-speech-transcriber";
 
 export interface Services {
   assistant: CareerAssistant;
   transcription: TranscriptionProvider;
+  liveTranscriber: LiveTranscriber;
   matchExtractor: MatchExtractor;
 }
 
@@ -21,6 +27,7 @@ export function getServices(): Services {
   services ??= {
     assistant: new MockCareerAssistant(),
     transcription: new MockTranscriptionProvider(),
+    liveTranscriber: new WebSpeechTranscriber(),
     matchExtractor: new RuleBasedMatchExtractor(),
   };
   return services;

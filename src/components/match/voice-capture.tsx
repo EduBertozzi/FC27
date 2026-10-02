@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { ROLE_LABEL, VENUE_LABEL } from "@/domain/match/match";
 import { type MatchInput } from "@/domain/match/schema";
 import { getServices } from "@/infrastructure/registry";
-import { type ExtractionResult } from "@/infrastructure/voice/types";
+import { type ExtractionResult, type LiveTranscriptionError } from "@/infrastructure/voice/types";
 import { cn } from "@/lib/cn";
 import { formatRating } from "@/lib/format";
 import { logger } from "@/lib/logger";
@@ -67,6 +67,17 @@ function describe(field: keyof MatchInput, fields: Partial<MatchInput>): string 
  * Fluxo de voz (Fase 1 simulada): gravar → transcrever → interpretar → prévia → confirmar.
  * Nenhum áudio é captado nem armazenado neste protótipo; a transcrição vem do provedor mock.
  */
+const VOICE_ERROR_MESSAGE: Record<LiveTranscriptionError, string> = {
+  "not-supported": "Este navegador não reconhece fala. Digite o relato abaixo.",
+  "permission-denied":
+    "O microfone foi bloqueado. Libere o acesso ao microfone para este site nas configurações do navegador e tente de novo.",
+  "no-microphone": "Nenhum microfone encontrado. Conecte um microfone ou digite o relato.",
+  "no-speech": "Não ouvi nada. Toque no microfone e fale mais perto do aparelho.",
+  network:
+    "O serviço de fala do navegador está sem conexão. Verifique a internet ou digite o relato.",
+  unknown: "O reconhecimento de fala falhou. Tente de novo ou digite o relato.",
+};
+
 export function VoiceCapture({
   open,
   onOpenChange,
@@ -77,22 +88,39 @@ export function VoiceCapture({
   const [step, setStep] = useState<Step>("idle");
   const [seconds, setSeconds] = useState(0);
   const [text, setText] = useState("");
+  const [live, setLive] = useState("");
   const [result, setResult] = useState<ExtractionResult | null>(null);
+  const [voiceError, setVoiceError] = useState<LiveTranscriptionError | null>(null);
+  const [supported, setSupported] = useState(true);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const stoppedByUser = useRef(false);
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    // Detectado só no cliente: o servidor não sabe qual navegador será usado.
+    const id = requestAnimationFrame(() =>
+      setSupported(getServices().liveTranscriber.isSupported()),
+    );
+    return () => {
+      cancelAnimationFrame(id);
       if (timer.current) clearInterval(timer.current);
-    },
-    [],
-  );
+      getServices().liveTranscriber.abort();
+    };
+  }, []);
+
+  const clearTimer = () => {
+    if (timer.current) clearInterval(timer.current);
+    timer.current = null;
+  };
 
   const reset = () => {
-    if (timer.current) clearInterval(timer.current);
+    clearTimer();
+    getServices().liveTranscriber.abort();
     setStep("idle");
     setSeconds(0);
     setText("");
+    setLive("");
     setResult(null);
+    setVoiceError(null);
   };
 
   const interpret = async (transcript: string) => {
@@ -112,22 +140,38 @@ export function VoiceCapture({
   };
 
   const startRecording = () => {
-    setStep("recording");
+    setVoiceError(null);
+    setLive("");
     setSeconds(0);
+    stoppedByUser.current = false;
+    setStep("recording");
     timer.current = setInterval(() => setSeconds((s) => s + 1), 1000);
+    getServices().liveTranscriber.start(
+      {
+        onText: setLive,
+        onError: (error) => {
+          clearTimer();
+          logger.warn("voice.live_error", { error });
+          setVoiceError(error);
+          setStep(error === "not-supported" ? "typing" : "idle");
+        },
+        onEnd: (finalText) => {
+          clearTimer();
+          const transcript = finalText.trim();
+          if (transcript) void interpret(transcript);
+          else if (stoppedByUser.current) {
+            setVoiceError("no-speech");
+            setStep("idle");
+          }
+        },
+      },
+      { language: "pt-BR" },
+    );
   };
 
-  const stopRecording = async () => {
-    if (timer.current) clearInterval(timer.current);
-    setStep("processing");
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 700));
-      const { text: transcript } = await getServices().transcription.transcribe(new Blob());
-      await interpret(transcript);
-    } catch (error) {
-      logger.error("voice.transcription_failed", error);
-      setStep("error");
-    }
+  const stopRecording = () => {
+    stoppedByUser.current = true;
+    getServices().liveTranscriber.stop();
   };
 
   const fieldsFound = result
@@ -175,7 +219,8 @@ export function VoiceCapture({
             <button
               type="button"
               onClick={startRecording}
-              className="grid size-28 place-items-center rounded-full border border-white/40 text-white shadow-[0_0_0_14px_rgb(170_184_255/0.12),0_0_0_32px_rgb(170_184_255/0.06)] transition-transform [background:radial-gradient(circle_at_35%_30%,rgb(255_255_255/0.7)_0%,rgb(150_170_255/0.6)_45%,rgb(80_100_230/0.75)_100%)] active:scale-95"
+              disabled={!supported}
+              className="grid size-28 place-items-center rounded-full border border-white/40 text-white shadow-[0_0_0_14px_rgb(170_184_255/0.12),0_0_0_32px_rgb(170_184_255/0.06)] transition-transform [background:radial-gradient(circle_at_35%_30%,rgb(255_255_255/0.7)_0%,rgb(150_170_255/0.6)_45%,rgb(80_100_230/0.75)_100%)] active:scale-95 disabled:opacity-40"
             >
               <Mic className="size-10" aria-hidden="true" />
               <span className="sr-only">Começar a gravar</span>
@@ -188,9 +233,20 @@ export function VoiceCapture({
               <Keyboard className="size-4" aria-hidden="true" />
               Prefiro digitar
             </Button>
-            <InlineAlert tone="info" className="text-left">
-              Protótipo: a gravação é simulada e nenhum áudio é captado ou armazenado.
-            </InlineAlert>
+            {voiceError ? (
+              <InlineAlert tone="error" className="text-left">
+                {VOICE_ERROR_MESSAGE[voiceError]}
+              </InlineAlert>
+            ) : null}
+            {!supported ? (
+              <InlineAlert tone="warning" className="text-left">
+                Este navegador não reconhece fala. Use Chrome, Edge ou Safari, ou digite o relato.
+              </InlineAlert>
+            ) : (
+              <p className="max-w-sm text-xs text-fg-3">
+                Usa o reconhecimento de fala do seu navegador. O app não grava nem guarda o áudio.
+              </p>
+            )}
           </div>
         ) : null}
 
@@ -209,18 +265,24 @@ export function VoiceCapture({
               ))}
             </div>
             <p className="tabular font-display text-3xl font-semibold">
-              0:{String(seconds).padStart(2, "0")}
-              <span className="sr-only"> segundos gravando</span>
+              {Math.floor(seconds / 60)}:{String(seconds % 60).padStart(2, "0")}
+              <span className="sr-only"> ouvindo</span>
+            </p>
+            <p className="min-h-16 max-w-md text-lg leading-relaxed text-fg" aria-live="polite">
+              {live || <span className="text-fg-3">Pode falar…</span>}
             </p>
             <Button variant="danger" size="lg" onClick={stopRecording}>
               <Square className="size-5" aria-hidden="true" />
-              Parar e transcrever
+              Parar e interpretar
             </Button>
           </div>
         ) : null}
 
         {step === "typing" ? (
           <div className="flex flex-col gap-4">
+            {voiceError ? (
+              <InlineAlert tone="warning">{VOICE_ERROR_MESSAGE[voiceError]}</InlineAlert>
+            ) : null}
             <Field label="Como foi a partida?">
               <Textarea
                 value={text}

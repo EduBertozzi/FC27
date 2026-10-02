@@ -231,7 +231,7 @@ Identidade **Glass** — vidro fosco sobre luzes de estádio, na linguagem visua
 
 - **Dados**: carreira demo e notícias são fixtures (`src/data/mock-career.ts`); persistência no `localStorage`.
 - **Assistente**: `MockCareerAssistant` — respostas por intenção, calculadas a partir dos dados reais da carreira.
-- **Voz**: gravação e transcrição simuladas (`MockTranscriptionProvider`); **nenhum áudio é captado ou armazenado**. A interpretação do texto é real (`RuleBasedMatchExtractor`, pt-BR).
+- **Voz**: real, pelo reconhecimento de fala do navegador (`WebSpeechTranscriber`, Web Speech API — Chrome, Edge e Safari; Firefox cai para digitação). O app não grava nem guarda áudio; o navegador pode usar o serviço de fala do fornecedor (Google no Chrome, Apple no Safari). A interpretação do texto é por regras (`RuleBasedMatchExtractor`, pt-BR); um extrator por IA entra na Fase 8.
 - **Notícias geradas**: templates determinísticos a partir das partidas.
 - **Escudos**: monogramas genéricos; nenhum escudo oficial.
 - Sem autenticação, backend ou banco.

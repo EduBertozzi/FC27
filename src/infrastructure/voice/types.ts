@@ -39,3 +39,26 @@ export interface MatchExtractor {
   readonly id: string;
   extract(transcript: string, context: ExtractionContext): Promise<ExtractionResult>;
 }
+
+export type LiveTranscriptionError =
+  "not-supported" | "permission-denied" | "no-microphone" | "no-speech" | "network" | "unknown";
+
+export interface LiveTranscriptionHandlers {
+  /** Texto acumulado até agora (finais + parcial atual). */
+  onText: (text: string) => void;
+  onError: (error: LiveTranscriptionError) => void;
+  /** O reconhecimento terminou (usuário parou ou o navegador encerrou por silêncio). */
+  onEnd: (finalText: string) => void;
+}
+
+/**
+ * Porta de transcrição ao vivo (streaming), para quando a fala é convertida
+ * enquanto o usuário fala. Implementação atual: Web Speech API do navegador.
+ */
+export interface LiveTranscriber {
+  readonly id: string;
+  isSupported(): boolean;
+  start(handlers: LiveTranscriptionHandlers, options?: { language?: string }): void;
+  stop(): void;
+  abort(): void;
+}
