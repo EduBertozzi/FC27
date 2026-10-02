@@ -74,7 +74,7 @@ export function OverallChart({
           ) : null}
           <path
             d={`${path} V${HEIGHT - PAD.bottom} H${x(first.date)} Z`}
-            fill="var(--accent-soft)"
+            fill="rgb(246 185 64 / 0.08)"
           />
           <path
             d={path}

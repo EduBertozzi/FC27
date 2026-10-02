@@ -14,7 +14,7 @@ interface NumberStepperProps {
   step?: number;
   /** Formata o valor exibido (ex.: nota com vírgula). */
   format?: (value: number) => string;
-  size?: "md" | "lg";
+  size?: "sm" | "md" | "lg";
   className?: string;
   error?: string;
 }
@@ -36,7 +36,7 @@ export function NumberStepper({
   const clamp = (v: number) => Math.min(max, Math.max(min, Math.round(v * 10) / 10));
   const btn = cn(
     "grid place-items-center rounded-sm text-fg-2 transition-colors hover:bg-surface-3 hover:text-fg active:scale-95 disabled:opacity-40 disabled:hover:bg-transparent",
-    size === "lg" ? "size-12" : "size-10",
+    size === "lg" ? "size-12" : size === "sm" ? "size-9" : "size-10",
   );
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
