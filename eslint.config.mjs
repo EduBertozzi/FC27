@@ -37,6 +37,11 @@ const eslintConfig = defineConfig([
       ],
     },
   },
+  {
+    // Scripts de desenvolvimento escrevem no terminal.
+    files: ["scripts/**"],
+    rules: { "no-console": "off" },
+  },
   globalIgnores([
     ".next/**",
     "out/**",
